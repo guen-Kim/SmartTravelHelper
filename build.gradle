@@ -12,4 +12,5 @@ task clean(type: Delete) {
 
 ext {
     cameraxVersion = "1.1.0"
+    mlkitVersion = "16.1.5"
 }

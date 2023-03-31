@@ -1,4 +1,4 @@
-package org.techtown.smart_travel_helper
+package org.techtown.smart_travel_helper.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
@@ -13,14 +14,19 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.snackbar.Snackbar
+import org.techtown.smart_travel_helper.*
+import org.techtown.smart_travel_helper.mlkit.vision.DrowsinessFaceAnalyzer
 import org.techtown.smart_travel_helper.databinding.ActivityDrowsinessDetectionBinding
-
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 
 class DrowsinessActicity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
 
     private lateinit var binding: ActivityDrowsinessDetectionBinding
     private lateinit var layout: View
+    lateinit var cameraExecutor : ExecutorService
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +36,15 @@ class DrowsinessActicity : AppCompatActivity(), ActivityCompat.OnRequestPermissi
             this, R.layout.activity_drowsiness_detection
         )
         layout = binding.root
+        cameraExecutor = Executors.newSingleThreadExecutor()
 
         // 권한 요청
         checkPermission()
+
+
+
+
+
     }
 
 
@@ -55,13 +67,21 @@ class DrowsinessActicity : AppCompatActivity(), ActivityCompat.OnRequestPermissi
                 preview.setSurfaceProvider(binding.previewView.surfaceProvider)
             }
 
+        val imageAnalysis = ImageAnalysis.Builder()
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .build()
+            .also {
+                it.setAnalyzer(cameraExecutor, DrowsinessFaceAnalyzer(binding.previewView))
+            }
+
+
         // Setting camera option
         var cameraSelector: CameraSelector = CameraSelector.Builder()
             .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
             .build()
 
         // bind lifecycle and use case
-        var camera = cameraProvider.bindToLifecycle(this as LifecycleOwner, cameraSelector, preview)
+        var camera = cameraProvider.bindToLifecycle(this as LifecycleOwner, cameraSelector, preview, imageAnalysis)
     }
 
 

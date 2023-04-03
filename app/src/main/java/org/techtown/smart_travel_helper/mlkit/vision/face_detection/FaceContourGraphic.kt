@@ -15,6 +15,7 @@ class FaceContourGraphic(
     private val facePositionPaint: Paint // Paint: 크레파스
     private val idPaint: Paint
     private val boxPaint: Paint
+    private val textPaint: Paint
 
     init {
         val selectedColor = Color.WHITE
@@ -32,11 +33,15 @@ class FaceContourGraphic(
         boxPaint.color = selectedColor
         boxPaint.style = Paint.Style.STROKE
         boxPaint.strokeWidth = BOX_STROKE_WIDTH
+
+        // Text 크레파스
+        textPaint = Paint()
+        textPaint.color = selectedColor
+        textPaint.textSize = 40f
     }
 
     /** 영상 데이터 위에 Canvas 그리기 그려질( Canvas 도화지 ) */
     override fun draw(canvas: Canvas?) {
-
         //TODO: face ROI draw
 
         // cropRect(탐지된 관심영역) 계산(회전 등)
@@ -46,9 +51,10 @@ class FaceContourGraphic(
             face.boundingBox
         )
         canvas?.drawRect(rect, boxPaint) // 사각형
+        canvas?.drawText("운전자", rect.width() + 270, rect.height() - 170, textPaint)
 
 
-/*        //TODO: face contours(윤관선) 그리기
+        //TODO: face contours(윤관선) 그리기
         val contours = face.allContours // face data 반환
         contours.forEach {
             it.points.forEach { point ->
@@ -56,17 +62,16 @@ class FaceContourGraphic(
                 val py = translateY(point.y)
                 //canvas?.drawCircle(px, py, FACE_POSITION_RADIUS, facePositionPaint) // 원형
             }
-        }*/
+        }
 
 
         //TODO: 특징점 그리기
-        canvas?.drawFace(FaceContour.FACE, Color.BLUE)
-
+        canvas?.drawFace(FaceContour.FACE, Color.GRAY)
         // left eye
-        canvas?.drawFace(FaceContour.LEFT_EYE, Color.BLACK)
+        canvas?.drawFace(FaceContour.LEFT_EYE, Color.RED)
 
         // right eye
-        canvas?.drawFace(FaceContour.RIGHT_EYE, Color.DKGRAY)
+        canvas?.drawFace(FaceContour.RIGHT_EYE, Color.RED)
 
     }
 

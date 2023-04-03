@@ -9,6 +9,7 @@ import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
 import org.techtown.smart_travel_helper.camerax.BaseImageAnalyzer
 import org.techtown.smart_travel_helper.camerax.GraphicOverlay
+import org.techtown.smart_travel_helper.common.EyeTracker
 import java.io.IOException
 
 class FaceContourDetectionProcessor(private val view: GraphicOverlay) :
@@ -17,8 +18,8 @@ class FaceContourDetectionProcessor(private val view: GraphicOverlay) :
     //옵션 내용: https://developers.google.com/ml-kit/vision/face-detection/android?hl=ko
     private val realTimeOpts = FaceDetectorOptions.Builder()
         .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
-        .setContourMode(FaceDetectorOptions.CONTOUR_MODE_ALL)
-        .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
+        .setContourMode(FaceDetectorOptions.CONTOUR_MODE_ALL) // for eyeContour
+        .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL) // for eyeOpenProbability
         .build()
 
     private val detector = FaceDetection.getClient(realTimeOpts)
@@ -38,6 +39,9 @@ class FaceContourDetectionProcessor(private val view: GraphicOverlay) :
         }
     }
 
+    /**
+     * 탐지결과
+     * **/
     override fun onSuccess(
         results: List<Face>, // 탐지된 faces data
         graphicOverlay: GraphicOverlay,
@@ -47,16 +51,36 @@ class FaceContourDetectionProcessor(private val view: GraphicOverlay) :
         graphicOverlay.clear()
 
         results.forEach {
-
             // TODO: face data, ROI 반복 그리기
             val faceGraphic = FaceContourGraphic(graphicOverlay, it, rect)
             graphicOverlay.add(faceGraphic)
 
             //TODO: face data, eyes open / close Probability
+            var leOpen = it.leftEyeOpenProbability ?: 5.0
+            var reOepn = it.rightEyeOpenProbability ?: 5.0
+            Log.d("eye", "왼쪽: ${leOpen}, 오른쪽: ${reOepn}")
 
-
-
-
+            with(EyeTracker) {
+                if ((reOepn.toFloat() < 0.3f) && (leOpen.toFloat() < 0.3f)) {
+                    //사용자가 눈을 감았다면
+                    if (isClosed) {
+                        // 이전에도 눈을 감았다면
+                        val endTime = System.currentTimeMillis()
+                        if (alarmTime <= endTime) {
+                            //TODO: new Thread run 알람
+                            Log.d("eye", "눈뜨세요.")
+                        }
+                    } else {
+                        // 이전에도 눈을 감지 않았다면
+                        startTime = System.currentTimeMillis()
+                        setAlarmTime(startTime, limitTime)
+                        isClosed = true
+                    }
+                } else {
+                    //사용자가 눈을 감지 않았다면
+                    isClosed = false
+                }
+            }
         }
         // draw 요청
         graphicOverlay.postInvalidate()

@@ -5,17 +5,11 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.snackbar.Snackbar
 import org.techtown.smart_travel_helper.*
-import org.techtown.smart_travel_helper.mlkit.vision.DrowsinessFaceAnalyzer
+import org.techtown.smart_travel_helper.camerax.CameraManager
 import org.techtown.smart_travel_helper.databinding.ActivityDrowsinessDetectionBinding
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -26,6 +20,8 @@ class DrowsinessActicity : AppCompatActivity(), ActivityCompat.OnRequestPermissi
     private lateinit var binding: ActivityDrowsinessDetectionBinding
     private lateinit var layout: View
     lateinit var cameraExecutor : ExecutorService
+    private lateinit var cameraManager: CameraManager
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +31,7 @@ class DrowsinessActicity : AppCompatActivity(), ActivityCompat.OnRequestPermissi
         binding = DataBindingUtil.setContentView(
             this, R.layout.activity_drowsiness_detection
         )
+        createCameraManager()
         layout = binding.root
         cameraExecutor = Executors.newSingleThreadExecutor()
 
@@ -42,55 +39,15 @@ class DrowsinessActicity : AppCompatActivity(), ActivityCompat.OnRequestPermissi
         checkPermission()
 
 
-
-
-
     }
-
-
-    // 카메라 preview 구현
-    private fun startCamerePreview() {
-        // CameraProvider 요청
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-
-        //CameraProvider availability 확인
-        cameraProviderFuture.addListener(Runnable {
-            val cameraProvider = cameraProviderFuture.get()
-            bindPreview(cameraProvider)
-        }, ContextCompat.getMainExecutor(this))
-    }
-
-    fun bindPreview(cameraProvider: ProcessCameraProvider) {
-        // Preview 와 PreviewView 연결
-        var preview: Preview = Preview.Builder()
-            .build().also { preview ->
-                preview.setSurfaceProvider(binding.previewView.surfaceProvider)
-            }
-
-        val imageAnalysis = ImageAnalysis.Builder()
-            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-            .build()
-            .also {
-                it.setAnalyzer(cameraExecutor, DrowsinessFaceAnalyzer(binding.previewView))
-            }
-
-
-        // Setting camera option
-        var cameraSelector: CameraSelector = CameraSelector.Builder()
-            .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
-            .build()
-
-        // bind lifecycle and use case
-        var camera = cameraProvider.bindToLifecycle(this as LifecycleOwner, cameraSelector, preview, imageAnalysis)
-    }
-
 
     private fun checkPermission() {
         // Camera permission 권한이 있는지 확인
         if (checkSelfPermissionCompat(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             // Camera permission 이 이미 수락되어 있다면, start camera preview
             layout.showSnackbar(R.string.camera_permission_granted, Snackbar.LENGTH_SHORT)
-            startCamerePreview()
+            cameraManager.startCamera()
+
 
         } else {
             // Camera permission 수락되어 있지 않다면, request
@@ -134,12 +91,23 @@ class DrowsinessActicity : AppCompatActivity(), ActivityCompat.OnRequestPermissi
             // Request for camera permission.
             if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission has been granted. Start camera preview Activity.
-                startCamerePreview()
+                //startCamerePreview()
+                cameraManager.startCamera()
+
 
             } else {
                 // Permission request was denied.
                 layout.showSnackbar(R.string.camera_permission_denied, Snackbar.LENGTH_SHORT) // * 실행 안됨.
             }
         }
+    }
+
+    private fun createCameraManager() {
+        cameraManager = CameraManager(
+            this,
+            binding.previewView,
+            this,
+            binding.graphicOverlayFinder
+        )
     }
 }

@@ -21,11 +21,13 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.camera.view.PreviewView
+
                 android:id="@+id/previewView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <View
+            <org.techtown.smart_travel_helper.camerax.GraphicOverlay
+                android:id="@+id/graphicOverlayFinder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 

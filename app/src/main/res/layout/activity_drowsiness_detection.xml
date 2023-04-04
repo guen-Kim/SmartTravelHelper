@@ -10,7 +10,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:backgroundTint="@color/STH_white">
 
         <FrameLayout
             android:layout_width="0dp"
@@ -28,12 +29,6 @@
 
             <org.techtown.smart_travel_helper.camerax.GraphicOverlay
                 android:id="@+id/graphicOverlayFinder"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-            <TextView
-                android:gravity="center"
-                android:text="test"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 

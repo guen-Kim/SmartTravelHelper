@@ -2,9 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="org.techtown.smart_travel_helper">
-<!--  카메라 사용 권한 선언 -->
+<!--  카메라 사용 권한 선언(위험권한)-->
     <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.CAMERA" />
+<!--    인터넷 권한 선언 (일반권한)-->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
 
     <application
         android:allowBackup="true"

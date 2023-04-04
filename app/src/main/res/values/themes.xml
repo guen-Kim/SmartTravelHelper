@@ -2,13 +2,13 @@
     <!-- Base application theme. -->
     <style name="Theme.Smart_travel_helper" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/STH_purple</item>
+        <item name="colorPrimaryVariant">@color/STH_blue_01</item>
+        <item name="colorOnPrimary">@color/STH_white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondary">@color/STH_purple</item>
+        <item name="colorSecondaryVariant">@color/STH_pink_01</item>
+        <item name="colorOnSecondary">@color/STH_black_01</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->

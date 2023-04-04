@@ -9,12 +9,13 @@ import org.techtown.smart_travel_helper.camerax.GraphicOverlay
 class FaceContourGraphic(
     overlay: GraphicOverlay,
     private val face: Face,
-    private val imageRect: Rect
+    private val imageRect: Rect,
+    private val closedEye: Boolean
 ) : GraphicOverlay.Graphic(overlay) {
 
     private val facePositionPaint: Paint // Paint: 크레파스
-    private val idPaint: Paint
     private val boxPaint: Paint
+    private val closedBoxPaint: Paint
     private val textPaint: Paint
 
     init {
@@ -24,15 +25,19 @@ class FaceContourGraphic(
         facePositionPaint = Paint()
         facePositionPaint.color = selectedColor
 
-        idPaint = Paint()
-        idPaint.color = selectedColor
-        idPaint.textSize = ID_TEXT_SIZE
-
         // 박스 크레파스
         boxPaint = Paint()
         boxPaint.color = selectedColor
         boxPaint.style = Paint.Style.STROKE
         boxPaint.strokeWidth = BOX_STROKE_WIDTH
+
+        // 박스 크레파스
+        closedBoxPaint = Paint()
+        closedBoxPaint.color = Color.RED
+        closedBoxPaint.style = Paint.Style.STROKE
+        closedBoxPaint.strokeWidth = BOX_STROKE_WIDTH
+
+
 
         // Text 크레파스
         textPaint = Paint()
@@ -50,28 +55,34 @@ class FaceContourGraphic(
             imageRect.width().toFloat(),
             face.boundingBox
         )
-        canvas?.drawRect(rect, boxPaint) // 사각형
+
+        if(closedEye){
+            canvas?.drawRect(rect, closedBoxPaint) // 사각형
+        }else{
+            canvas?.drawRect(rect, boxPaint)
+
+        }
         canvas?.drawText("운전자", rect.width() + 270, rect.height() - 170, textPaint)
 
 
         //TODO: face contours(윤관선) 그리기
-        val contours = face.allContours // face data 반환
-        contours.forEach {
-            it.points.forEach { point ->
-                val px = translateX(point.x)
-                val py = translateY(point.y)
-                //canvas?.drawCircle(px, py, FACE_POSITION_RADIUS, facePositionPaint) // 원형
-            }
-        }
+//        val contours = face.allContours // face data 반환
+//        contours.forEach {
+//            it.points.forEach { point ->
+//                val px = translateX(point.x)
+//                val py = translateY(point.y)
+//                //canvas?.drawCircle(px, py, FACE_POSITION_RADIUS, facePositionPaint) // 원형
+//            }
+//        }
 
 
         //TODO: 특징점 그리기
         canvas?.drawFace(FaceContour.FACE, Color.GRAY)
         // left eye
-        canvas?.drawFace(FaceContour.LEFT_EYE, Color.RED)
+        canvas?.drawFace(FaceContour.LEFT_EYE, Color.GRAY)
 
         // right eye
-        canvas?.drawFace(FaceContour.RIGHT_EYE, Color.RED)
+        canvas?.drawFace(FaceContour.RIGHT_EYE, Color.GRAY)
 
     }
 

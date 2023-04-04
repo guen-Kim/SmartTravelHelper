@@ -10,6 +10,7 @@ import com.google.mlkit.vision.face.FaceDetectorOptions
 import org.techtown.smart_travel_helper.camerax.BaseImageAnalyzer
 import org.techtown.smart_travel_helper.camerax.GraphicOverlay
 import org.techtown.smart_travel_helper.common.EyeTracker
+import org.techtown.smart_travel_helper.common.EyeTracker.isClosed
 import java.io.IOException
 
 class FaceContourDetectionProcessor(private val view: GraphicOverlay) :
@@ -51,11 +52,11 @@ class FaceContourDetectionProcessor(private val view: GraphicOverlay) :
         graphicOverlay.clear()
 
         results.forEach {
-            // TODO: face data, ROI 반복 그리기
-            val faceGraphic = FaceContourGraphic(graphicOverlay, it, rect)
+            val faceGraphic = FaceContourGraphic(graphicOverlay, it, rect, isClosed)
             graphicOverlay.add(faceGraphic)
 
             //TODO: face data, eyes open / close Probability
+            // TODO: face data, ROI 반복 그리기
             var leOpen = it.leftEyeOpenProbability ?: 5.0
             var reOepn = it.rightEyeOpenProbability ?: 5.0
             Log.d("eye", "왼쪽: ${leOpen}, 오른쪽: ${reOepn}")
@@ -63,24 +64,36 @@ class FaceContourDetectionProcessor(private val view: GraphicOverlay) :
             with(EyeTracker) {
                 if ((reOepn.toFloat() < 0.3f) && (leOpen.toFloat() < 0.3f)) {
                     //사용자가 눈을 감았다면
-                    if (isClosed) {
-                        // 이전에도 눈을 감았다면
+                    if (isClosed && timeAdjustmentFactor >= 20) {
+                        // 눈 2회 이상 눈을 감았다면
                         val endTime = System.currentTimeMillis()
                         if (alarmTime <= endTime) {
+                            Log.d("timePass","${alarmTime}, ${endTime}")
+                            val faceGraphic = FaceContourGraphic(graphicOverlay, it, rect, isClosed)
+                            graphicOverlay.add(faceGraphic)
                             //TODO: new Thread run 알람
-                            Log.d("eye", "눈뜨세요.")
+                            Log.d("timePass", "눈뜨세요.")
                         }
                     } else {
-                        // 이전에도 눈을 감지 않았다면
+                        // 눈 1회 감음
                         startTime = System.currentTimeMillis()
                         setAlarmTime(startTime, limitTime)
                         isClosed = true
+                        val faceGraphic = FaceContourGraphic(graphicOverlay, it, rect, false) // 1회 깜박임은 레드 박스 x
+                        graphicOverlay.add(faceGraphic)
+                        timeAdjustmentFactor++ // time 조정
                     }
                 } else {
-                    //사용자가 눈을 감지 않았다면
                     isClosed = false
+                    //사용자가 눈을 감지 않았다면
+                    timeAdjustmentFactor = 0
+                    val faceGraphic = FaceContourGraphic(graphicOverlay, it, rect, isClosed)
+                    graphicOverlay.add(faceGraphic)
+
                 }
             }
+
+
         }
         // draw 요청
         graphicOverlay.postInvalidate()

@@ -8,6 +8,7 @@ object EyeTracker {
     var startTime: Long = 0L // 눈감기 시작한 시간
     var alarmTime: Long = 0
     var isClosed: Boolean = false
+    var timeAdjustmentFactor: Int = 0 // 시간조정변수
     var alarmCallState: Boolean =false
     var closedCount: Int = 0
 

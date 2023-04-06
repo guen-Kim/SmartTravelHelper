@@ -20,8 +20,7 @@
         android:theme="@style/Theme.Smart_travel_helper"
         tools:targetApi="31">
         <activity
-            android:screenOrientation="landscape"
-            android:name=".ui.DrowsinessActicity"
+            android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

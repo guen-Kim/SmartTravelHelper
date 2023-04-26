@@ -2,7 +2,7 @@ package org.techtown.smart_travel_helper
 
 
 
-const val PERMISSION_REQUEST_CAMERA = 0
+const val PERMISSION_REQUEST_CODE = 0
 
 const val TMAP_API_KEY= "j1MKrD2Bcx2Vt1ibRJsO1akBYm4Rr9uV1UvSSja5"
 const val UTF8_URL_SLEEP_SHELTER= "%EC%A1%B8%EC%9D%8C%EC%89%BC%ED%84%B0" // 졸음쉼터

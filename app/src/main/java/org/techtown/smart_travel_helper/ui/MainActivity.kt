@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         //tmap 초기화
         setTMapAuthAndInit()
 
-        image = BitmapFactory.decodeResource(resources, R.drawable.poi_dot)
+        image = createMarkerIcon(R.drawable.poi_dot)
 
         // 지도 생성 하기, 비동기 처리
         tMapView.setOnMapReadyListener(TMapView.OnMapReadyListener {
@@ -70,16 +70,16 @@ class MainActivity : AppCompatActivity() {
         tMapView.setSKTMapApiKey(TMAP_API_KEY)
     }
 
-    private fun createMarkerIcon(): Bitmap {
-        imageBolloon = BitmapFactory.decodeResource(resources, R.drawable.i_go_sel)
-        imageBolloon = Bitmap.createScaledBitmap(imageBolloon, 50, 50, false);
+    private fun createMarkerIcon(image : Int): Bitmap {
+        imageBolloon = BitmapFactory.decodeResource(resources,image)
+        imageBolloon = Bitmap.createScaledBitmap(imageBolloon, 100, 100, false);
         return imageBolloon
     }
 
 
     private fun searchPOI() {
             val service = ApiClient.create()
-            //Tmap api 통신
+            //Tmap api 통신, 메인스레드 비동기 호출 callback 매커니즘으로 응답처리
             service.getSearchROI(UTF8_URL_REST_AREA, "10", TMAP_API_KEY).enqueue(object: Callback<SearchPoi> {
                 override fun onResponse(call: Call<SearchPoi>, response: Response<SearchPoi>) {
 
@@ -119,12 +119,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun setBalloonView(marker: TMapMarkerItem, title: String, address: String) {
         marker.canShowCallout = true
-
         if (marker.canShowCallout) {
             marker.calloutTitle = title
             marker.calloutSubTitle = address
-            val bitmap = createMarkerIcon()
-            marker.calloutRightButtonImage = bitmap
+//            val bitmap = createMarkerIcon(R.drawable.i_go_sel)
+//            marker.calloutRightButtonImage = bitmap
 
         }
     }

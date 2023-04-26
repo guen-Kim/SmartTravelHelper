@@ -14,7 +14,6 @@ fun AppCompatActivity.checkSelfPermissionCompat(permission: String) =
 
 // 사용자가 권한 요청을 명시적으로 거부한 경우 true를 반환한다.
 // 사용자가 권한 요청을 처음 보거나, 다시 묻지 않음 선택한 경우, 권한을 허용한 경우 false를 반환한다
-// 결론적으로, shouldShowRequestPermissionRationale는 onRequestPermissionsResult 이외의 코드에서 사용하면 비결정적이다.
 fun AppCompatActivity.shouldShowRequestPermissionRationaleCompat(permission: String) =
     ActivityCompat.shouldShowRequestPermissionRationale(this, permission)
 

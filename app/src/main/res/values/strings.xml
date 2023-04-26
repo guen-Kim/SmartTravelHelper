@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">smart_travel_helper</string>
-    <string name="camera_access_required">실시간 졸음 감지 기능을 사용하기 위해선 카메라 엑세스 권한이 필요합니다.</string>
     <string name="ok">확인</string>
     <string name="camera_permission_granted">카메라 엑세스 권한이 수락되었습니다.</string>
     <string name="camera_permission_denied">카메라 엑세스 거부</string>
     <string name="camera_permission_not_available">카메라 접근 권한이 유효하지 않습니다. 권한을 승락 해주세요.</string>
+    <string name="permission_request">실시간 졸음 감지 기능을 사용하려면 다음 권한이 필요합니다.</string>
+    <string name="inactive_gps">쉼터 안내 기능을 사용하려면 GSP를 활성화 후, 다시 시작해 주세요.</string>
 </resources>

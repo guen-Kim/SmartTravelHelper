@@ -2,10 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="org.techtown.smart_travel_helper">
-<!--  카메라 사용 권한 선언(위험권한)-->
+<!-- 런타임 권한 선언-->
+    <!-- 카메라   -->
     <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.CAMERA" />
-<!--    인터넷 권한 선언 (일반권한)-->
+    <!-- foreground location   -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- for precise location acccess.  -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+
+<!-- 일반권한)-->
+    <!--인터넷-->
     <uses-permission android:name="android.permission.INTERNET"/>
 
 
@@ -20,7 +28,8 @@
         android:theme="@style/Theme.Smart_travel_helper"
         tools:targetApi="31">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.DrowsinessActicity"
+            android:screenOrientation="landscape"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

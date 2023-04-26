@@ -13,9 +13,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import com.google.android.material.snackbar.Snackbar
 import org.techtown.smart_travel_helper.PERMISSION_REQUEST_CODE
 import org.techtown.smart_travel_helper.R
 import org.techtown.smart_travel_helper.databinding.ActivityMainBinding
+import org.techtown.smart_travel_helper.showSnackbar
 
 class testActivity : AppCompatActivity() {
 
@@ -30,6 +32,8 @@ class testActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(
             this, R.layout.activity_main
         )
+
+
         OnCheckPermission();
     }
 

@@ -11,7 +11,11 @@ task clean(type: Delete) {
 
 
 ext {
+    kakaoNaviUiVersion = "1.6.10"
     cameraxVersion = "1.1.0"
     mlkitVersion = "16.1.5"
     retrofitVersion = '2.9.0'
+    kotlin_version = '1.5.0'
+    kotlinx_version = '1.5.1'
+
 }

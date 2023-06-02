@@ -12,10 +12,17 @@ abstract class BaseImageAnalyzer<T> : ImageAnalysis.Analyzer {
 
     @androidx.camera.core.ExperimentalGetImage
     override fun analyze(imageProxy: ImageProxy) {
+
+
         val mediaImage = imageProxy.image
+
+// https://developers.google.com/android/reference/com/google/mlkit/vision/face/FaceContour
         mediaImage?.let {
             detectInImage(InputImage.fromMediaImage(it, imageProxy.imageInfo.rotationDegrees))
                 .addOnSuccessListener { results ->
+
+                    //Log.d("result", results.toString()) //얼굴 디텍션 안되면 빈배열 나옴.
+
                     onSuccess(
                         results,
                         graphicOverlay,
@@ -31,6 +38,10 @@ abstract class BaseImageAnalyzer<T> : ImageAnalysis.Analyzer {
                     imageProxy.close()
                 }
         }
+
+
+
+
     }
 
     abstract fun stop()

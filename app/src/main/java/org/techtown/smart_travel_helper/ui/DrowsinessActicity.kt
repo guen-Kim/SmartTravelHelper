@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -13,27 +14,33 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.snackbar.Snackbar
-import org.techtown.smart_travel_helper.*
+import org.techtown.smart_travel_helper.PERMISSION_REQUEST_CODE
+import org.techtown.smart_travel_helper.R
 import org.techtown.smart_travel_helper.camerax.CameraManager
 import org.techtown.smart_travel_helper.databinding.ActivityDrowsinessDetectionBinding
+import org.techtown.smart_travel_helper.kakaonavi.NaviBaseActivity
 import org.techtown.smart_travel_helper.location.ClientFusedLocation
 import org.techtown.smart_travel_helper.location.OnLocationUpdateListener
+import org.techtown.smart_travel_helper.showSnackbar
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 
-class DrowsinessActicity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback,
-    OnLocationUpdateListener {
+class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissionsResultCallback,
+    OnLocationUpdateListener
+{
 
     private lateinit var binding: ActivityDrowsinessDetectionBinding
     private lateinit var layout: View
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var cameraManager: CameraManager
     private lateinit var clientFusedLocation: ClientFusedLocation
+    var PATHGUIDE: Boolean = false
+    var WARRINGSOUND: Boolean = false
+    lateinit var mediaPlayer: MediaPlayer
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +50,9 @@ class DrowsinessActicity : AppCompatActivity(), ActivityCompat.OnRequestPermissi
         binding = DataBindingUtil.setContentView(
             this, R.layout.activity_drowsiness_detection
         )
+
+        init()
+
         createCameraManager()
         layout = binding.root
         // 카메라 실행 유지를 위한 스레드 생성
@@ -50,8 +60,59 @@ class DrowsinessActicity : AppCompatActivity(), ActivityCompat.OnRequestPermissi
         // 퍼미션 체크
         OnCheckPermission()
 
+        setStatusBarColor()
+
+
+
 
     }
+
+    private fun init(){
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.alarm);
+
+        binding.swPathGuide.setOnCheckedChangeListener{CompoundButton, onSwitch ->
+            PATHGUIDE = onSwitch
+        }
+
+        binding.swWarringSound.setOnCheckedChangeListener{CompoundButton, onSwitch ->
+            WARRINGSOUND = onSwitch
+        }
+        binding.btnStart.setOnClickListener { v->
+            binding.btnStart.isEnabled = false
+            binding.btnEnd.isEnabled = true
+            binding.swPathGuide.isEnabled = false
+            binding.swWarringSound.isEnabled = false
+
+            cameraManager.startCamera()
+
+        }
+
+
+
+    }
+
+
+
+
+
+    fun startNavi(){
+
+        val fragment = NaviFragment()
+        val bundle = Bundle()
+        bundle.putString("key", getKey())
+
+        // 프래그먼트에 Bundle 설정
+        fragment.arguments = bundle
+
+        // FragmentManager를 사용하여 프래그먼트 추가 또는 교체
+        val fragmentManager = supportFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+        transaction.add(R.id.fragment_container, fragment)
+        transaction.commit()
+
+    }
+
 
     private fun OnCheckPermission() {
         // 권한이 있는지 없는지 확인
@@ -110,7 +171,6 @@ class DrowsinessActicity : AppCompatActivity(), ActivityCompat.OnRequestPermissi
                 }
             }
         } else {
-            cameraManager.startCamera()
             startFusedLocation()
         }
 
@@ -135,13 +195,12 @@ class DrowsinessActicity : AppCompatActivity(), ActivityCompat.OnRequestPermissi
                         if (grant != PackageManager.PERMISSION_GRANTED) {
                             // 거부한 권한이 있다면
                             isAllGranted = false
-                            break;
+                            break
                         }
                     }
 
                     // 요청한 권한을 모두 허용했음.
                     if (isAllGranted) {
-                        cameraManager.startCamera()
                         startFusedLocation()
 
                     } else {
@@ -166,6 +225,14 @@ class DrowsinessActicity : AppCompatActivity(), ActivityCompat.OnRequestPermissi
             }
         }
     }
+
+
+    /* 검색 완료 콜백 */
+    // 검색 완료 후,
+    override fun onCompleteSearch() {
+        startNavi()
+    }
+
 
     /**권한 설정창**/
     private fun alertAuthoritySetting() {
@@ -206,7 +273,6 @@ class DrowsinessActicity : AppCompatActivity(), ActivityCompat.OnRequestPermissi
             // finish()
         } else {
             Toast.makeText(this, "기능을 사용하실 수 있습니다.", Toast.LENGTH_SHORT).show()
-            cameraManager.startCamera()
             startFusedLocation()
         }
     }
@@ -216,6 +282,12 @@ class DrowsinessActicity : AppCompatActivity(), ActivityCompat.OnRequestPermissi
         if (clientFusedLocation != null) {
             clientFusedLocation.stopLocationUpdates() // 위치 업데이트 요청 종료
         }
+
+        // MediaPlayer 해지
+        if (mediaPlayer != null) {
+            mediaPlayer.release()
+        }
+
     }
 
     private fun createCameraManager() {
@@ -223,7 +295,8 @@ class DrowsinessActicity : AppCompatActivity(), ActivityCompat.OnRequestPermissi
             this,
             binding.previewView,
             this,
-            binding.graphicOverlayFinder
+            binding.graphicOverlayFinder,
+            this
         )
     }
 
@@ -242,12 +315,12 @@ class DrowsinessActicity : AppCompatActivity(), ActivityCompat.OnRequestPermissi
                 "Test", "GPS Location Latitude: $latitude" +
                         ", Longitude: $longitude"
             )
-        }else {
+        } else {
             layout.showSnackbar(
                 R.string.inactive_gps,
                 Snackbar.LENGTH_INDEFINITE,
                 R.string.ok
-            ){
+            ) {
 
             }
         }

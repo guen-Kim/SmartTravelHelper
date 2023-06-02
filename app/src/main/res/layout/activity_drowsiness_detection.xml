@@ -11,13 +11,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:backgroundTint="@color/STH_white">
+        android:backgroundTint="@color/STH_white"
+        android:keepScreenOn="true">
 
         <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1.1:1"
+            android:id="@+id/frameLayout2"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -30,9 +32,101 @@
             <org.techtown.smart_travel_helper.camerax.GraphicOverlay
                 android:id="@+id/graphicOverlayFinder"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
 
         </FrameLayout>
+
+
+        <TextView
+            android:id="@+id/tv_pathGuide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:text="쉼터 안내"
+
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="@id/sw_pathGuide"
+            app:layout_constraintTop_toBottomOf="@id/sw_warringSound"
+            tools:textColor="@color/black" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/sw_pathGuide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            app:layout_constraintStart_toEndOf="@id/frameLayout2"
+            app:layout_constraintTop_toBottomOf="@id/tv_pathGuide" />
+
+        <TextView
+            android:id="@+id/tv_warringSound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="졸음 경고"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="@id/sw_warringSound"
+            app:layout_constraintTop_toTopOf="@id/frameLayout2"
+            tools:textColor="@color/black" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/sw_warringSound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textSize="10dp"
+
+            app:layout_constraintStart_toEndOf="@id/frameLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/tv_warringSound" />
+
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_container"
+            android:layout_width="450dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/sw_warringSound"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_userStateDisplay"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="@id/frameLayout2"
+            app:layout_constraintStart_toStartOf="@id/frameLayout2"
+            app:layout_constraintTop_toBottomOf="@id/frameLayout2">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="위험"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="시작"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/cv_userStateDisplay" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="종료"
+            android:enabled="false"
+            app:layout_constraintBottom_toBottomOf="@id/btn_start"
+            app:layout_constraintEnd_toEndOf="@id/cv_userStateDisplay"
+            app:layout_constraintStart_toEndOf="@id/btn_start" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

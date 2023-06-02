@@ -78,11 +78,12 @@ class FaceContourGraphic(
 
         //TODO: 특징점 그리기
         canvas?.drawFace(FaceContour.FACE, Color.GRAY)
-        // left eye
-        canvas?.drawFace(FaceContour.LEFT_EYE, Color.GRAY)
 
-        // right eye
-        canvas?.drawFace(FaceContour.RIGHT_EYE, Color.GRAY)
+//        // left eye
+//        canvas?.drawFace(FaceContour.LEFT_EYE, Color.GRAY)
+//
+//        // right eye
+//        canvas?.drawFace(FaceContour.RIGHT_EYE, Color.GRAY)
 
     }
 

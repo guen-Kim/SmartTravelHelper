@@ -1,7 +1,17 @@
+
+
+
+
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 }
+
+
+// local.properties에서 키, 값 가져오기
+def localProperties  = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
 
 android {
     compileSdk 32
@@ -12,15 +22,20 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        // BuildConfig 필드 초기화 |타입|변수이름|값
+        buildConfigField "String", "kakaoNaviKey", localProperties['KAKAONAVI_API_KEY']
+
     }
 
     buildTypes {
         release {
             minifyEnabled false
+
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -36,16 +51,28 @@ android {
 }
 
 dependencies {
+    def lifecycle_version = "2.5.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
 
+    implementation "androidx.annotation:annotation-experimental:1.0.0"
 
-    //tmap
-    implementation files('libs/vsm-tmap-sdk-v2-android-1.6.60.aar')
-    implementation files('libs/tmap-sdk-1.2.aar')
+    // kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_version"
+
+
+    implementation "androidx.activity:activity-ktx:1.2.3"
+
+
+    // kakao, Android 길찾기 UI SDK
+    implementation "com.kakaomobility.knsdk:knsdk_ui:${kakaoNaviUiVersion}"
+
 
     //fused location
     implementation 'com.google.android.gms:play-services-location:17.1.0'
-
 
     //ML Kit
     implementation "com.google.mlkit:face-detection:${mlkitVersion}"
@@ -58,12 +85,11 @@ dependencies {
     implementation "androidx.camera:camera-view:${cameraxVersion}"
     implementation "androidx.camera:camera-extensions:${cameraxVersion}"
 
-
-
-
     //Network
+    // 1. Retrofit2
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    // 2. okhttp
     implementation platform("com.squareup.okhttp3:okhttp-bom:4.9.0")
     implementation "com.squareup.okhttp3:okhttp"
     implementation "com.squareup.okhttp3:logging-interceptor"
@@ -79,4 +105,5 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
 }

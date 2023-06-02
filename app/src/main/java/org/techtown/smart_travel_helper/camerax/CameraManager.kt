@@ -1,5 +1,6 @@
 package org.techtown.smart_travel_helper.camerax
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import androidx.camera.core.*
@@ -16,7 +17,8 @@ class CameraManager(
     private val context: Context,
     private val finderView: PreviewView,
     private val lifecycleOwner: LifecycleOwner,
-    private val graphicOverlay: GraphicOverlay
+    private val graphicOverlay: GraphicOverlay,
+    private val activity : Activity
 ) {
 
     private var preview: Preview? = null
@@ -39,7 +41,7 @@ class CameraManager(
 
 
     private fun setFaceAnalyzer(): ImageAnalysis.Analyzer {
-        return FaceContourDetectionProcessor(graphicOverlay)
+        return FaceContourDetectionProcessor(graphicOverlay, activity)
 
     }
 

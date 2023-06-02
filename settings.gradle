@@ -10,6 +10,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://devrepo.kakaomobility.com/repository/kakao-mobility-android-knsdk-public/"}
     }
 }
 rootProject.name = "smart_travel_helper"

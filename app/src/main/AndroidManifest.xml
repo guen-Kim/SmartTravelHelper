@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="org.techtown.smart_travel_helper">
-
     <!-- 런타임 권한 선언 -->
     <!-- 카메라 -->
     <uses-feature android:name="android.hardware.camera" />
@@ -12,8 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- for precise location acccess. -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 일반권한) -->
     <!-- 인터넷 -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- 포그라운드 서비스 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 포그라운드 서비스 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
@@ -21,16 +19,21 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_travel_helper"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.WebViewActivity"
+            android:exported="false" />
+
         <service
             android:name=".service.NaviService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <activity
             android:name=".ui.DrowsinessActicity"

@@ -15,7 +15,7 @@ import org.techtown.smart_travel_helper.BuildConfig
 import org.techtown.smart_travel_helper.R
 import org.techtown.smart_travel_helper.application.GlobalApplication.Companion.knsdk
 import org.techtown.smart_travel_helper.databinding.ActivityIntroBinding
-import org.techtown.smart_travel_helper.ui.DrowsinessActicity
+import org.techtown.smart_travel_helper.ui.WebViewActivity
 
 
 class IntroActivity : AppCompatActivity() {
@@ -68,7 +68,9 @@ class IntroActivity : AppCompatActivity() {
             override fun onAnimationRepeat(animation: Animation?) {}
             override fun onAnimationStart(animation: Animation?) {}
             override fun onAnimationEnd(animation: Animation?) {
-                startActivity(Intent(applicationContext, DrowsinessActicity::class.java))
+                //startActivity(Intent(applicationContext, DrowsinessActicity::class.java))
+                startActivity(Intent(applicationContext, WebViewActivity::class.java))
+
                 finish()
             }
         });

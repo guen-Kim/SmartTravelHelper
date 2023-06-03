@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">smart_travel_helper</string>
+    <string name="app_name">SmarTtravelHelper</string>
     <string name="ok">확인</string>
     <string name="camera_permission_granted">카메라 엑세스 권한이 수락되었습니다.</string>
     <string name="camera_permission_denied">카메라 엑세스 거부</string>

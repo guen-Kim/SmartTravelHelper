@@ -5,6 +5,8 @@
     <color name="STH_pink_02">#11e062ff</color>
     <color name="STH_blue_01">#6b19ff</color>
     <color name="STH_blue_02_main">#70BAFF</color>
+    <color name="STH_blue_02_main_a90">#E670BAFF</color>
+    <color name="STH_inactivity">#f3f3f3</color>
     <color name="STH_pink">#fd62ff</color>
     <color name="STH_black_01">#000000</color>
     <color name="STH_black_01_a08">#14000000</color>

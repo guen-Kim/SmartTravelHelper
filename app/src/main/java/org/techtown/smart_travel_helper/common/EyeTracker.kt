@@ -18,6 +18,8 @@ object EyeTracker {
     var isHeadDown: Boolean = true
     var timeAdjustmentFactor_headDown: Int = 0
 
+    var go : Boolean = false
+
 
     var alarmCallState: Boolean =false
     var closedCount: Int = 0

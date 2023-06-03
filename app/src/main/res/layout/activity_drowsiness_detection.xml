@@ -44,8 +44,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
             android:text="쉼터 안내"
-
-            android:textColor="@color/white"
+            android:textColor="@color/bg_black_a70"
             app:layout_constraintStart_toStartOf="@id/sw_pathGuide"
             app:layout_constraintTop_toBottomOf="@id/sw_warringSound"
             tools:textColor="@color/black" />
@@ -54,9 +53,12 @@
             android:id="@+id/sw_pathGuide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             app:layout_constraintStart_toEndOf="@id/frameLayout2"
-            app:layout_constraintTop_toBottomOf="@id/tv_pathGuide" />
+            app:layout_constraintTop_toBottomOf="@id/tv_pathGuide"
+            app:thumbTint="@color/STH_blue_02_main"
+
+            app:trackTint="@color/STH_bluegrey"
+            app:useMaterialThemeColors="false" />
 
         <TextView
             android:id="@+id/tv_warringSound"
@@ -64,7 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:text="졸음 경고"
-            android:textColor="@color/white"
+            android:textColor="@color/bg_black_a70"
             app:layout_constraintStart_toStartOf="@id/sw_warringSound"
             app:layout_constraintTop_toTopOf="@id/frameLayout2"
             tools:textColor="@color/black" />
@@ -75,9 +77,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:textSize="10dp"
-
             app:layout_constraintStart_toEndOf="@id/frameLayout2"
-            app:layout_constraintTop_toBottomOf="@+id/tv_warringSound" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_warringSound"
+            app:thumbTint="@color/STH_blue_02_main"
+            app:trackTint="@color/STH_bluegrey"
+            app:useMaterialThemeColors="false" />
 
 
         <androidx.fragment.app.FragmentContainerView
@@ -88,6 +92,38 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/sw_warringSound"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_ex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="졸음 퇴치 설정을 해주세요."
+            android:textColor="@color/bg_black_a70"
+            android:textSize="15dp"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toTopOf="@id/iv_text_logo"
+            app:layout_constraintEnd_toEndOf="@id/iv_text_logo"
+            app:layout_constraintStart_toStartOf="@id/iv_text_logo" />
+
+
+        <ImageView
+            android:id="@+id/iv_text_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logo_text_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/fragment_container"
+            app:layout_constraintStart_toStartOf="@id/fragment_container"
+            app:layout_constraintTop_toTopOf="@id/fragment_container"
+            app:layout_constraintVertical_bias="0.4" />
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logo"
+            app:layout_constraintStart_toStartOf="@id/iv_text_logo"
+            app:layout_constraintTop_toBottomOf="@id/iv_text_logo" />
 
 
         <androidx.cardview.widget.CardView
@@ -114,7 +150,10 @@
             android:id="@+id/btn_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/btn_selector"
             android:text="시작"
+            android:textColor="@color/STH_white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/cv_userStateDisplay" />
 
@@ -122,8 +161,11 @@
             android:id="@+id/btn_end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="종료"
             android:enabled="false"
+            android:text="종료"
+            android:background="@drawable/btn_selector"
+
+            android:textColor="@color/STH_white"
             app:layout_constraintBottom_toBottomOf="@id/btn_start"
             app:layout_constraintEnd_toEndOf="@id/cv_userStateDisplay"
             app:layout_constraintStart_toEndOf="@id/btn_start" />

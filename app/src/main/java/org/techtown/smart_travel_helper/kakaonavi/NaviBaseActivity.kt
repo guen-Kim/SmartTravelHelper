@@ -1,6 +1,9 @@
 package org.techtown.smart_travel_helper.kakaonavi
 
+import android.content.Context
 import android.content.Intent
+import android.os.Build
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -24,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.techtown.smart_travel_helper.application.GlobalApplication
+import org.techtown.smart_travel_helper.service.NaviService
 import org.techtown.smart_travel_helper.ui.MainActivity
 
 // Request route coroutine
@@ -46,9 +50,6 @@ abstract class NaviBaseActivity : AppCompatActivity(), OnCompleteSearchforNavi {
 
 
     open fun initialize() {
-        // 상태바 색상 설정
-        // setStatusBarColor(getColor(applicationContext, ))
-
 
         // 화면을 켜진 상태로 유지
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -57,17 +58,8 @@ abstract class NaviBaseActivity : AppCompatActivity(), OnCompleteSearchforNavi {
     protected fun setStatusBarColor(aIsFullScreen: Boolean = true) {
         if (aIsFullScreen) {
             @Suppress("DEPRECATION")
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//                window.insetsController?.let{
-//                    it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-//                    it.hide(WindowInsets.Type.systemBars())
-//                }
-//            } else {
-            // lean back 모드: 사용자가 동영상을 시청할 때와 같이 화면과 거의 상호작용하지 않을 때 사용할 수 있는 전체 화면 환경 설정
-            //lean back 모드를 사용 설정
             window.decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//            }
         }
 
         //상태바  색상
@@ -259,7 +251,5 @@ abstract class NaviBaseActivity : AppCompatActivity(), OnCompleteSearchforNavi {
             }
         }
     }
-
-
 
 }

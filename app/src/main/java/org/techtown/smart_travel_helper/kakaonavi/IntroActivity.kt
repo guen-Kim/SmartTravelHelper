@@ -69,7 +69,12 @@ class IntroActivity : AppCompatActivity() {
                                 }
                             }
                         } else {
-                            startActivity(Intent(applicationContext, DrowsinessActicity::class.java))
+                            startActivity(
+                                Intent(
+                                    applicationContext,
+                                    DrowsinessActicity::class.java
+                                )
+                            )
                             finish()
                         }
                     })

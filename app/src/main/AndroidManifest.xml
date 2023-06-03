@@ -2,16 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="org.techtown.smart_travel_helper">
+
     <!-- 런타임 권한 선언 -->
     <!-- 카메라 -->
     <uses-feature android:name="android.hardware.camera" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.CAMERA" /> <!-- foreground location -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- for precise location acccess. -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 일반권한) -->
     <!-- 인터넷 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 포그라운드 서비스 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".application.GlobalApplication"
@@ -24,12 +27,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_travel_helper"
         tools:targetApi="31">
+        <service
+            android:name=".service.NaviService"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <activity
             android:name=".ui.DrowsinessActicity"
-            android:screenOrientation="landscape"
-
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|locale|layoutDirection|density"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".kakaonavi.IntroActivity"
             android:exported="true">

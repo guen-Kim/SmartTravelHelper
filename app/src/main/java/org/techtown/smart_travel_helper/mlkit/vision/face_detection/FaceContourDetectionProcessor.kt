@@ -2,6 +2,7 @@ package org.techtown.smart_travel_helper.mlkit.vision.face_detection
 
 import android.app.Activity
 import android.graphics.Rect
+import android.media.MediaPlayer
 import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.mlkit.vision.common.InputImage
@@ -13,8 +14,6 @@ import org.techtown.smart_travel_helper.camerax.BaseImageAnalyzer
 import org.techtown.smart_travel_helper.camerax.GraphicOverlay
 import org.techtown.smart_travel_helper.common.EyeTracker
 import org.techtown.smart_travel_helper.common.EyeTracker.isClosed
-import org.techtown.smart_travel_helper.common.EyeTracker.isHeadDown
-import org.techtown.smart_travel_helper.common.EyeTracker.timeAdjustmentFactor_headDown
 import org.techtown.smart_travel_helper.ui.DrowsinessActicity
 import java.io.IOException
 
@@ -34,11 +33,13 @@ class FaceContourDetectionProcessor(
     //옵션 내용: https://developers.google.com/ml-kit/vision/face-detection/android?hl=ko
     private val realTimeOpts = FaceDetectorOptions.Builder()
         .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
-        .setContourMode(FaceDetectorOptions.CONTOUR_MODE_ALL) // for eyeContour
+        .setContourMode(FaceDetectorOptions.LANDMARK_MODE_NONE) // for eyeContour
         .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL) // for eyeOpenProbability
         .build()
 
     private val detector = FaceDetection.getClient(realTimeOpts)
+    var leOpen: Float = 5.0f
+    var reOepn: Float = 5.0f
 
     override val graphicOverlay: GraphicOverlay
         get() = view
@@ -67,15 +68,22 @@ class FaceContourDetectionProcessor(
         graphicOverlay.clear()
 
 
+        //졸음감지 패턴1 default - 눈 (길안내 or 경고음)
+        startDrowsinessPattern_eye(
+            results,
+            graphicOverlay,
+            rect,
+            drowsinessActicity.PATHGUIDE,
+            drowsinessActicity.WARRINGSOUND
+        )
 
-        // 졸음감지 패턴1 - 눈 (길안내, 경고음)
-        startDrowsinessPattern_eye(results, graphicOverlay, rect, drowsinessActicity.PATHGUIDE, drowsinessActicity.WARRINGSOUND)
 
-        if(drowsinessActicity.WARRINGSOUND){
+
+
+        if (drowsinessActicity.WARRINGSOUND) {
             // 졸음감지 패턴2 - 고개(경고음)
             startDrowsinessPattern_headDown(results)
         }
-
 
 
         // draw 요청
@@ -93,7 +101,7 @@ class FaceContourDetectionProcessor(
 
                     } else {
                         //Todo:알람
-                        drowsinessActicity.mediaPlayer.start()
+                        drowsinessActicity.mediaPlayerB.start()
                     }
                 } else {
                     timeAdjustmentFactor_headDown = 1
@@ -102,9 +110,9 @@ class FaceContourDetectionProcessor(
                 }
 
             } else {
-                // 고개 안떨굼
-                if (drowsinessActicity.mediaPlayer.isPlaying) {
-                    drowsinessActicity.mediaPlayer.pause()
+                //고개 안떨굼
+                if (drowsinessActicity.mediaPlayerB.isPlaying) {
+                    drowsinessActicity.mediaPlayerB.pause()
                 }
                 timeAdjustmentFactor_headDown = 0
             }
@@ -120,46 +128,48 @@ class FaceContourDetectionProcessor(
         guide: Boolean,
         alarm: Boolean
     ) {
-        results.forEach {
-            val faceGraphic = FaceContourGraphic(graphicOverlay, it, rect, isClosed)
+        if (results.isNotEmpty()) {
+
+            val faceGraphic = FaceContourGraphic(graphicOverlay, results[0], rect, isClosed)
             graphicOverlay.add(faceGraphic)
 
             //TODO: face data, eyes open / close Probability
             // TODO: face data, ROI 반복 그리기
-            var leOpen = it.leftEyeOpenProbability ?: 5.0
-            var reOepn = it.rightEyeOpenProbability ?: 5.0
-//            Log.d("eye", "왼쪽: ${leOpen}, 오른쪽: ${reOepn}")
+            leOpen = results[0].leftEyeOpenProbability ?: 0.5f
+            reOepn = results[0].rightEyeOpenProbability ?: 0.5f
 
             with(EyeTracker) {
-                if ((reOepn.toFloat() < 0.3f) && (leOpen.toFloat() < 0.3f)) {
+                if ((reOepn < 0.3f) || (leOpen < 0.3f)) {
                     //사용자가 눈을 감았다면
-                    if (isClosed && timeAdjustmentFactor >= 20) {
+                    if (isClosed && timeAdjustmentFactor <= 20) {
                         // 눈 2회 이상 눈을 감았다면
                         val endTime = System.currentTimeMillis()
                         if (alarmTime <= endTime) {
-                            //                           Log.d("timePass","${alarmTime}, ${endTime}")
-                            val faceGraphic = FaceContourGraphic(graphicOverlay, it, rect, isClosed)
+                            val faceGraphic =
+                                FaceContourGraphic(graphicOverlay, results[0], rect, isClosed)
                             graphicOverlay.add(faceGraphic)
 
                             //TODO: 내비 or 알람
-                            scope.launch(Dispatchers.Default){
-
+                            scope.launch(Dispatchers.Default) {
                                 if (alarm) {
-                                    drowsinessActicity.mediaPlayer.start()
-                                    alarmStart = false
+                                    //EyeTracker.alarmStart = false
+                                    drowsinessActicity.mediaPlayerA.start()
                                 }
 
-                                if (guideStart && guide) {
-                                    guideStart = false
+                                if (EyeTracker.guideStart && guide) {
+                                    EyeTracker.guideStart = false
+                                    // guideStart 내비 종료시 true
                                     drowsinessActicity.reqSearchWithType()
                                 }
-                                if (guideStart && guide && alarm){
-                                    guideStart = false
+                                if (EyeTracker.guideStart && guide && alarm) {
+                                    EyeTracker.guideStart = false
                                     drowsinessActicity.reqSearchWithType()
-                                    drowsinessActicity.mediaPlayer.start()
+                                    drowsinessActicity.mediaPlayerA.start()
                                 }
 
                             }
+                        } else {
+
                         }
                     } else {
                         // 눈 1회 감음
@@ -167,19 +177,25 @@ class FaceContourDetectionProcessor(
                         setAlarmTime(startTime, limitTime)
                         isClosed = true
                         val faceGraphic =
-                            FaceContourGraphic(graphicOverlay, it, rect, false) // 1회 깜박임은 레드 박스 x
+                            FaceContourGraphic(
+                                graphicOverlay,
+                                results.get(0),
+                                rect,
+                                false
+                            ) // 1회 깜박임은 레드 박스 x
                         graphicOverlay.add(faceGraphic)
                         timeAdjustmentFactor++ // time 조정
                     }
                 } else {
                     //사용자가 눈을 감지 않았다면
-                    if (drowsinessActicity.mediaPlayer.isPlaying) {
-                        drowsinessActicity.mediaPlayer.pause()
+                    if (drowsinessActicity.mediaPlayerA.isPlaying) {
+                        drowsinessActicity.mediaPlayerA.pause()
                     }
                     isClosed = false
                     alarmStart = true
                     timeAdjustmentFactor = 0
-                    val faceGraphic = FaceContourGraphic(graphicOverlay, it, rect, isClosed)
+                    val faceGraphic =
+                        FaceContourGraphic(graphicOverlay, results.get(0), rect, isClosed)
                     graphicOverlay.add(faceGraphic)
 
                 }
@@ -187,7 +203,6 @@ class FaceContourDetectionProcessor(
 
 
         }
-
 
     }
 

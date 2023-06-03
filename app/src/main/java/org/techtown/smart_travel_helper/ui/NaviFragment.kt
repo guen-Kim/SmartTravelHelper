@@ -1,5 +1,8 @@
 package org.techtown.smart_travel_helper.ui
 
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -7,6 +10,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.view.isVisible
 import com.kakaomobility.knsdk.KNCarFuel
 import com.kakaomobility.knsdk.KNCarType
 import com.kakaomobility.knsdk.KNRoutePriority
@@ -28,15 +34,19 @@ import com.kakaomobility.knsdk.ui.view.KNNaviView_GuideStateDelegate
 import com.kakaomobility.knsdk.ui.view.KNNaviView_StateDelegate
 import org.techtown.smart_travel_helper.R
 import org.techtown.smart_travel_helper.application.GlobalApplication
+import org.techtown.smart_travel_helper.common.EyeTracker
+import org.w3c.dom.Text
 
 class NaviFragment : Fragment(), KNNaviView_StateDelegate, KNNaviView_GuideStateDelegate,
     KNGuidance_GuideStateDelegate, KNGuidance_LocationGuideDelegate, KNGuidance_RouteGuideDelegate,
     KNGuidance_SafetyGuideDelegate, KNGuidance_VoiceGuideDelegate, KNGuidance_CitsGuideDelegate {
 
     lateinit var naviView: KNNaviView
+    lateinit var endText: TextView
+    lateinit var imageText: ImageView
+    lateinit var imageLogo: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("프래그먼트","ㄹㄴㅇㄹ")
         super.onCreate(savedInstanceState)
 
     }
@@ -52,7 +62,11 @@ class NaviFragment : Fragment(), KNNaviView_StateDelegate, KNNaviView_GuideState
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        naviView = view.findViewById<KNNaviView>(R.id.navi_view)
+
+
+        initView(view)
+
+
 
 
         naviView.stateDelegate = this@NaviFragment
@@ -95,8 +109,24 @@ class NaviFragment : Fragment(), KNNaviView_StateDelegate, KNNaviView_GuideState
             )
         }
 
-        //startForegroundService(this, "길안내 주행중", "빠르고 즐거운 운전, 카카오내비")
     }
+
+    private fun initView(view: View) {
+        naviView = view.findViewById<KNNaviView>(R.id.navi_view)
+        endText = view.findViewById<TextView>(R.id.tv_end)
+        imageText = view.findViewById<ImageView>(R.id.iv_text_logo)
+        imageLogo = view.findViewById<ImageView>(R.id.iv_logo)
+
+        endText.visibility = View.GONE
+        imageText.visibility = View.GONE
+        imageLogo.visibility = View.GONE
+
+
+
+
+
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -116,11 +146,7 @@ class NaviFragment : Fragment(), KNNaviView_StateDelegate, KNNaviView_GuideState
         KNSDK.sharedGuidance()?.stop()
     }
 
-//    override fun initialize() {
-//        //setStatusBarColor(Color.TRANSPARENT)
-//
-//        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-//    }
+
 
     //  ---------------------------------------------------------------------------------------------------------------------------
 
@@ -145,7 +171,17 @@ class NaviFragment : Fragment(), KNNaviView_StateDelegate, KNNaviView_GuideState
     //  ===========================================================================================================================
 
     override fun naviViewGuideEnded() {
+        //todo: 내비종료
         naviView.mapComponent.mapView.onPause()
+        KNSDK.sharedGuidance()?.stop()
+
+        naviView.visibility = View.GONE
+        endText.visibility = View.VISIBLE
+        imageText.visibility = View.VISIBLE
+        imageLogo.visibility = View.VISIBLE
+
+        // naviView.setBackgroundResource(R.drawable.poi_dot)
+        EyeTracker.guideStart = true // 내비 초기화
     }
 
     //  ---------------------------------------------------------------------------------------------------------------------------
@@ -188,6 +224,7 @@ class NaviFragment : Fragment(), KNNaviView_StateDelegate, KNNaviView_GuideState
     ) {
         naviView.guidanceDidUpdateRoutes(aGuidance, aRoutes, aMultiRouteInfo)
     }
+
 
     //  ---------------------------------------------------------------------------------------------------------------------------
 
@@ -261,4 +298,6 @@ class NaviFragment : Fragment(), KNNaviView_StateDelegate, KNNaviView_GuideState
     override fun didUpdateCitsGuide(aGuidance: KNGuidance, aCitsGuide: KNGuide_Cits) {
         naviView.didUpdateCitsGuide(aGuidance, aCitsGuide)
     }
+
+
 }

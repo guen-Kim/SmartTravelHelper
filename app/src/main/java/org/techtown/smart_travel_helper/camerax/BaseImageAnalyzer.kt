@@ -21,8 +21,6 @@ abstract class BaseImageAnalyzer<T> : ImageAnalysis.Analyzer {
             detectInImage(InputImage.fromMediaImage(it, imageProxy.imageInfo.rotationDegrees))
                 .addOnSuccessListener { results ->
 
-                    //Log.d("result", results.toString()) //얼굴 디텍션 안되면 빈배열 나옴.
-
                     onSuccess(
                         results,
                         graphicOverlay,
@@ -38,8 +36,6 @@ abstract class BaseImageAnalyzer<T> : ImageAnalysis.Analyzer {
                     imageProxy.close()
                 }
         }
-
-
 
 
     }

@@ -2,12 +2,14 @@ package org.techtown.smart_travel_helper.ui
 
 import android.Manifest
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -15,6 +17,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.snackbar.Snackbar
 import org.techtown.smart_travel_helper.PERMISSION_REQUEST_CODE
@@ -24,6 +27,7 @@ import org.techtown.smart_travel_helper.databinding.ActivityDrowsinessDetectionB
 import org.techtown.smart_travel_helper.kakaonavi.NaviBaseActivity
 import org.techtown.smart_travel_helper.location.ClientFusedLocation
 import org.techtown.smart_travel_helper.location.OnLocationUpdateListener
+import org.techtown.smart_travel_helper.service.NaviService
 import org.techtown.smart_travel_helper.showSnackbar
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -40,7 +44,9 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
     private lateinit var clientFusedLocation: ClientFusedLocation
     var PATHGUIDE: Boolean = false
     var WARRINGSOUND: Boolean = false
-    lateinit var mediaPlayer: MediaPlayer
+    lateinit var mediaPlayerA: MediaPlayer
+    lateinit var mediaPlayerB: MediaPlayer
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,8 +74,11 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
     }
 
     private fun init(){
+        startForegroundService(this, "안전한 주행중", "안전하고 즐거운 운전, STH")
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.alarm);
+        mediaPlayerA = MediaPlayer.create(this, R.raw.alarm);
+        mediaPlayerB = MediaPlayer.create(this, R.raw.alarm);
+
 
         binding.swPathGuide.setOnCheckedChangeListener{CompoundButton, onSwitch ->
             PATHGUIDE = onSwitch
@@ -83,13 +92,11 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
             binding.btnEnd.isEnabled = true
             binding.swPathGuide.isEnabled = false
             binding.swWarringSound.isEnabled = false
-
+            binding.ivLogo.visibility = View.GONE
+            binding.ivTextLogo.visibility = View.GONE
+            binding.tvEx.visibility = View.GONE
             cameraManager.startCamera()
-
         }
-
-
-
     }
 
 
@@ -284,10 +291,16 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
         }
 
         // MediaPlayer 해지
-        if (mediaPlayer != null) {
-            mediaPlayer.release()
+        if (mediaPlayerA != null) {
+            mediaPlayerA.release()
+        }
+        if (mediaPlayerB != null) {
+            mediaPlayerB.release()
         }
 
+
+        // 포그라운드 서비스 종료
+        stopForegroundService(this)
     }
 
     private fun createCameraManager() {
@@ -324,6 +337,27 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
 
             }
         }
+    }
+    // ---------------------Service--------------------
+    private fun startForegroundService(context : Context, title : String, content : String) {
+        val bundle = Bundle().apply {
+            putString("title", title)
+            putString("content", content)
+        }
+
+        val intent = Intent(context, NaviService::class.java).apply {
+            putExtra(NaviService.EXTRA_BUNDLE, bundle)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent)
+        } else {
+            context.startService(intent)
+        }
+    }
+
+    private fun stopForegroundService(context : Context) {
+        context.stopService(Intent(context, NaviService::class.java))
     }
 
     companion object {

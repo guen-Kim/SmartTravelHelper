@@ -1,15 +1,9 @@
 package org.techtown.smart_travel_helper.ui
 
-import android.location.Location
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 
-import org.techtown.smart_travel_helper.R
 import org.techtown.smart_travel_helper.databinding.ActivityMainBinding
-import org.techtown.smart_travel_helper.location.ClientFusedLocation
-import org.techtown.smart_travel_helper.location.OnLocationUpdateListener
-
 
 
 /**
@@ -25,9 +19,8 @@ class MainActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // binding data
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
     }
 

@@ -1,157 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#DCDCDC"
+    android:keepScreenOn="true"
+    tools:background="#DCDCDC">
 
-    <data>
+    <FrameLayout
+        android:id="@+id/frameLayout2"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    </data>
+        <androidx.camera.view.PreviewView
 
+            android:id="@+id/previewView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#DCDCDC"
-        tools:background="#DCDCDC"
-        android:keepScreenOn="true">
+        <org.techtown.smart_travel_helper.camerax.GraphicOverlay
+            android:id="@+id/graphicOverlayFinder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-        <FrameLayout
-            android:id="@+id/frameLayout2"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="30dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.camera.view.PreviewView
-
-                android:id="@+id/previewView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <org.techtown.smart_travel_helper.camerax.GraphicOverlay
-                android:id="@+id/graphicOverlayFinder"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </FrameLayout>
+    </FrameLayout>
 
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/sw_pathGuide"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="쉼터안내"
-            android:textColor="@color/black"
-            android:textSize="13dp"
-            app:layout_constraintStart_toEndOf="@id/sw_warringSound"
-            app:layout_constraintTop_toBottomOf="@id/cv_userStateDisplay"
-            app:thumbTint="@color/STH_blue_02_main"
-            app:trackTint="@color/STH_grey_05"
-            app:useMaterialThemeColors="false" />
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/sw_pathGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="쉼터안내"
+        android:textColor="@color/black"
+        android:textSize="13dp"
+        app:layout_constraintStart_toEndOf="@id/sw_warringSound"
+        app:layout_constraintTop_toBottomOf="@id/cv_userStateDisplay"
+        app:thumbTint="@color/STH_blue_02_main"
+        app:trackTint="@color/STH_grey_05"
+        app:useMaterialThemeColors="false" />
 
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/sw_warringSound"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:text="경고음"
-            android:textColor="@color/black"
-            android:textSize="13dp"
-            app:layout_constraintStart_toStartOf="@id/frameLayout2"
-            app:layout_constraintTop_toBottomOf="@+id/cv_userStateDisplay"
-            app:thumbTint="@color/STH_blue_02_main"
-            app:trackTint="@color/STH_grey_05"
-            app:useMaterialThemeColors="false" />
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/sw_warringSound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="경고음"
+        android:textColor="@color/black"
+        android:textSize="13dp"
+        app:layout_constraintStart_toStartOf="@id/frameLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/cv_userStateDisplay"
+        app:thumbTint="@color/STH_blue_02_main"
+        app:trackTint="@color/STH_grey_05"
+        app:useMaterialThemeColors="false" />
 
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragment_container"
-            android:layout_width="450dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container"
+        android:layout_width="450dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_ex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="졸음 퇴치 설정을 해주세요."
+        android:textColor="@color/bg_black_a70"
+        android:textSize="15dp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@id/iv_text_logo"
+        app:layout_constraintEnd_toEndOf="@id/iv_text_logo"
+        app:layout_constraintStart_toStartOf="@id/iv_text_logo" />
+
+
+    <ImageView
+        android:id="@+id/iv_text_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo_text_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_container"
+        app:layout_constraintStart_toStartOf="@id/fragment_container"
+        app:layout_constraintTop_toTopOf="@id/fragment_container"
+        app:layout_constraintVertical_bias="0.4" />
+
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo"
+        app:layout_constraintStart_toStartOf="@id/iv_text_logo"
+        app:layout_constraintTop_toBottomOf="@id/iv_text_logo" />
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_userStateDisplay"
+        android:layout_width="0dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@id/frameLayout2"
+        app:layout_constraintStart_toStartOf="@id/frameLayout2"
+        app:layout_constraintTop_toBottomOf="@id/frameLayout2">
 
         <TextView
-            android:id="@+id/tv_ex"
+            android:id="@+id/tv_userState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="졸음 퇴치 설정을 해주세요."
-            android:textColor="@color/bg_black_a70"
-            android:textSize="15dp"
-            android:textStyle="italic"
-            app:layout_constraintBottom_toTopOf="@id/iv_text_logo"
-            app:layout_constraintEnd_toEndOf="@id/iv_text_logo"
-            app:layout_constraintStart_toStartOf="@id/iv_text_logo" />
+            android:layout_gravity="center"
+            android:text="졸음 퇴치 방법을 선택해주세요."
+            android:textColor="@color/gray_500"
+            android:textSize="11dp" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/btn_selector"
+        android:text="시작"
+        android:textColor="@color/STH_white_Smoky"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/cv_userStateDisplay" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_selector"
+        android:enabled="false"
+        android:text="종료"
+
+        android:textColor="@color/STH_white_Smoky"
+        app:layout_constraintBottom_toBottomOf="@id/btn_start"
+        app:layout_constraintEnd_toEndOf="@id/cv_userStateDisplay"
+        app:layout_constraintStart_toEndOf="@id/btn_start" />
 
 
-        <ImageView
-            android:id="@+id/iv_text_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/logo_text_background"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/fragment_container"
-            app:layout_constraintStart_toStartOf="@id/fragment_container"
-            app:layout_constraintTop_toTopOf="@id/fragment_container"
-            app:layout_constraintVertical_bias="0.4" />
-
-        <ImageView
-            android:id="@+id/iv_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/logo"
-            app:layout_constraintStart_toStartOf="@id/iv_text_logo"
-            app:layout_constraintTop_toBottomOf="@id/iv_text_logo" />
-
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_userStateDisplay"
-            android:layout_width="0dp"
-            android:layout_height="15dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="@id/frameLayout2"
-            app:layout_constraintStart_toStartOf="@id/frameLayout2"
-            app:layout_constraintTop_toBottomOf="@id/frameLayout2">
-
-            <TextView
-                android:id="@+id/tv_userState"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="@color/gray_500"
-                android:textSize="11dp"
-                android:text="졸음 퇴치 방법을 선택해주세요." />
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/btn_selector"
-            android:text="시작"
-            android:textColor="@color/STH_white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/cv_userStateDisplay" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_selector"
-            android:enabled="false"
-            android:text="종료"
-
-            android:textColor="@color/STH_white"
-            app:layout_constraintBottom_toBottomOf="@id/btn_start"
-            app:layout_constraintEnd_toEndOf="@id/cv_userStateDisplay"
-            app:layout_constraintStart_toEndOf="@id/btn_start" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>

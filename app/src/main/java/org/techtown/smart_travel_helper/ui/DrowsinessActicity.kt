@@ -18,8 +18,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
-import androidx.core.view.isVisible
-import androidx.databinding.DataBindingUtil
 import com.google.android.material.snackbar.Snackbar
 import org.techtown.smart_travel_helper.PERMISSION_REQUEST_CODE
 import org.techtown.smart_travel_helper.R
@@ -54,10 +52,9 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // binding data
-        binding = DataBindingUtil.setContentView(
-            this, R.layout.activity_drowsiness_detection
-        )
+        // view binding
+        binding = ActivityDrowsinessDetectionBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         init()
 

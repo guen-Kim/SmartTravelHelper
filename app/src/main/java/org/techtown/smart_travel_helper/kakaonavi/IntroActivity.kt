@@ -1,8 +1,10 @@
 package org.techtown.smart_travel_helper.kakaonavi
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import androidx.appcompat.app.AppCompatActivity
 import com.kakaomobility.knsdk.KNLanguageType
 import com.kakaomobility.knsdk.common.objects.KNError_Code_C302
 import kotlinx.coroutines.CoroutineScope
@@ -12,16 +14,27 @@ import kotlinx.coroutines.launch
 import org.techtown.smart_travel_helper.BuildConfig
 import org.techtown.smart_travel_helper.R
 import org.techtown.smart_travel_helper.application.GlobalApplication.Companion.knsdk
+import org.techtown.smart_travel_helper.databinding.ActivityIntroBinding
 import org.techtown.smart_travel_helper.ui.DrowsinessActicity
+
 
 class IntroActivity : AppCompatActivity() {
     private val job = Job()
     private val scope = CoroutineScope(Dispatchers.Main + job)
     private val KAKAO_KEY: String = BuildConfig.kakaoNaviKey; // API KEY
+    lateinit var animFadeIn: Animation
+    lateinit var animTransrate: Animation
+
+    private lateinit var binding: ActivityIntroBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_intro)
+
+        // view binding
+        binding = ActivityIntroBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        initSplashAnim()
 
 
         // 안드로이드 앱 홈 화면 위젯(HomeScreenWidgets)을 클릭한 후, 홈 버튼을 누르고 앱 아이콘을 누를 때 액티비티(Activity)가 중첩
@@ -43,6 +56,24 @@ class IntroActivity : AppCompatActivity() {
         }
 
         sdkInit()
+
+    }
+
+    private fun initSplashAnim() {
+        animFadeIn = AnimationUtils.loadAnimation(this, R.anim.splash_fadein);
+        animTransrate = AnimationUtils.loadAnimation(this, R.anim.splash_translate);
+
+        animFadeIn.setAnimationListener(object :
+            Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {}
+            override fun onAnimationStart(animation: Animation?) {}
+            override fun onAnimationEnd(animation: Animation?) {
+                startActivity(Intent(applicationContext, DrowsinessActicity::class.java))
+                finish()
+            }
+        });
+
+
 
     }
 
@@ -69,13 +100,10 @@ class IntroActivity : AppCompatActivity() {
                                 }
                             }
                         } else {
-                            startActivity(
-                                Intent(
-                                    applicationContext,
-                                    DrowsinessActicity::class.java
-                                )
-                            )
-                            finish()
+                            binding.view.startAnimation(animTransrate)
+                            binding.tvSubTitle.startAnimation(animFadeIn)
+                            binding.tvSth.startAnimation(animFadeIn)
+
                         }
                     })
             }

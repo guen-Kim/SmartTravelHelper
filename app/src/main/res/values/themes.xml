@@ -4,7 +4,7 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/STH_purple</item>
         <item name="colorPrimaryVariant">@color/STH_blue_01</item>
-        <item name="colorOnPrimary">@color/STH_white</item>
+        <item name="colorOnPrimary">@color/STH_white_Smoky</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/STH_purple</item>
         <item name="colorSecondaryVariant">@color/STH_pink_01</item>

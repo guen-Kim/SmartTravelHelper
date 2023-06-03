@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/STH_white_Smoky"
+    tools:background="@color/STH_white_Smoky"
     tools:context=".kakaonavi.IntroActivity">
+
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="wrap_content"
@@ -22,6 +26,7 @@
         android:fontFamily="serif"
         android:text="STH"
         android:textSize="100dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,22 +34,27 @@
 
     <View
         android:id="@+id/view"
-        android:layout_width="160dp"
+        android:layout_width="0dp"
         android:layout_height="5dp"
         android:layout_marginTop="8dp"
         android:background="@color/gray_500"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_sth" />
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_sth" />
 
     <TextView
         android:id="@+id/tv_subTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="15dp"
+        android:textSize="13dp"
         android:text="당신을 위한 즐겁고 안전한 여행"
         android:textStyle="italic"
-        app:layout_constraintStart_toEndOf="@+id/view"
-        app:layout_constraintTop_toBottomOf="@+id/tv_sth" />
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_sth" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

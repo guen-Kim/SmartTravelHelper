@@ -16,11 +16,10 @@ import org.techtown.smart_travel_helper.location.OnLocationUpdateListener
  * https://youngest-programming.tistory.com/371 리팩토링 참고
  * */
 
-class MainActivity : AppCompatActivity(), OnLocationUpdateListener {
+class MainActivity : AppCompatActivity(){
 
 
     lateinit var binding: ActivityMainBinding
-    private lateinit var clientFusedLocation: ClientFusedLocation
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,23 +28,8 @@ class MainActivity : AppCompatActivity(), OnLocationUpdateListener {
         // binding data
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        startFusedLocation()
 
     }
-
-
-    //user location
-    override fun onLocationUpdated(location: Location?) {
-
-
-    }
-
-    private fun startFusedLocation() {
-        clientFusedLocation = ClientFusedLocation(this, this)
-        clientFusedLocation.requestLastLocation()
-        clientFusedLocation.startLocationUpdates()
-    }
-
 
 
 }

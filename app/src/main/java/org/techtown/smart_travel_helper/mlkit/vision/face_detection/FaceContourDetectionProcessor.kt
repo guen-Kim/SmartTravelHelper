@@ -149,6 +149,7 @@ class FaceContourDetectionProcessor(
                                 FaceContourGraphic(graphicOverlay, results[0], rect, isClosed)
                             graphicOverlay.add(faceGraphic)
 
+
                             //TODO: 내비 or 알람
                             scope.launch(Dispatchers.Default) {
                                 if (alarm) {

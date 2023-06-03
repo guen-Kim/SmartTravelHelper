@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.AnimationDrawable
 import android.location.Location
 import android.media.MediaPlayer
 import android.net.Uri
@@ -46,6 +47,7 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
     var WARRINGSOUND: Boolean = false
     lateinit var mediaPlayerA: MediaPlayer
     lateinit var mediaPlayerB: MediaPlayer
+    lateinit var animationDrawable: AnimationDrawable
 
 
 
@@ -67,10 +69,6 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
         OnCheckPermission()
 
         setStatusBarColor()
-
-
-
-
     }
 
     private fun init(){
@@ -95,7 +93,16 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
             binding.ivLogo.visibility = View.GONE
             binding.ivTextLogo.visibility = View.GONE
             binding.tvEx.visibility = View.GONE
+            binding.tvUserState.text = "실시간 감지중"
+
+            // 카메라 활성화
             cameraManager.startCamera()
+            // usetState
+            binding.cvUserStateDisplay.setBackgroundResource(R.drawable.gradient_list)
+            animationDrawable = binding.cvUserStateDisplay.background as AnimationDrawable
+            animationDrawable.setEnterFadeDuration(2000);
+            animationDrawable.setExitFadeDuration(4000);
+            animationDrawable.start()
         }
     }
 

@@ -7,6 +7,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.AnimationDrawable
+import android.icu.number.Scale.none
 import android.location.Location
 import android.media.MediaPlayer
 import android.net.Uri
@@ -43,6 +44,7 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
     private lateinit var clientFusedLocation: ClientFusedLocation
     var PATHGUIDE: Boolean = false
     var WARRINGSOUND: Boolean = false
+    var time: Long = 0;
     lateinit var mediaPlayerA: MediaPlayer
     lateinit var mediaPlayerB: MediaPlayer
     lateinit var animationDrawable: AnimationDrawable
@@ -51,6 +53,8 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 액티비티 애니매이션
+        overridePendingTransition(R.anim.horizon_enter,R.anim.horizon_exit)
 
         // view binding
         binding = ActivityDrowsinessDetectionBinding.inflate(layoutInflater)
@@ -77,10 +81,12 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
 
         binding.swPathGuide.setOnCheckedChangeListener{CompoundButton, onSwitch ->
             PATHGUIDE = onSwitch
+
         }
 
         binding.swWarringSound.setOnCheckedChangeListener{CompoundButton, onSwitch ->
             WARRINGSOUND = onSwitch
+
         }
         binding.btnStart.setOnClickListener { v->
             binding.btnStart.isEnabled = false
@@ -100,6 +106,11 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
             animationDrawable.setEnterFadeDuration(2000);
             animationDrawable.setExitFadeDuration(4000);
             animationDrawable.start()
+        }
+
+        binding.btnEnd.setOnClickListener { v->
+            startActivity(Intent(applicationContext,DetectionResultActivity::class.java))
+            finish()
         }
     }
 
@@ -237,6 +248,18 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
         }
     }
 
+    override fun onBackPressed() {
+        if(System.currentTimeMillis() - time >= 2000){
+            time = System.currentTimeMillis();
+            Toast.makeText(getApplicationContext(),"한번더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
+        }
+
+        else if(System.currentTimeMillis() - time < 2000 ){
+            super.onBackPressed()
+        }
+
+    }
+
 
     /* 검색 완료 콜백 */
     // 검색 완료 후,
@@ -294,13 +317,21 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
             clientFusedLocation.stopLocationUpdates() // 위치 업데이트 요청 종료
         }
 
-        // MediaPlayer 해지
-        if (mediaPlayerA != null) {
-            mediaPlayerA.release()
+        try{
+            // MediaPlayer 해지
+            if (mediaPlayerA != null && mediaPlayerA.isPlaying()) {
+                mediaPlayerA.stop()
+                mediaPlayerA.release()
+            }
+            if (mediaPlayerB != null && mediaPlayerB.isPlaying()) {
+                mediaPlayerA.stop()
+                mediaPlayerB.release()
+
+            }
+        }catch (e: IllegalStateException) {
+            e.printStackTrace()
         }
-        if (mediaPlayerB != null) {
-            mediaPlayerB.release()
-        }
+
 
 
         // 포그라운드 서비스 종료

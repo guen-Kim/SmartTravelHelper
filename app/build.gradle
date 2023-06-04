@@ -51,6 +51,8 @@ android {
     }
 }
 
+
+// 외부 오픈소스 로드
 dependencies {
     def lifecycle_version = "2.5.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
@@ -58,6 +60,11 @@ dependencies {
 
 
     implementation "androidx.annotation:annotation-experimental:1.0.0"
+
+
+    //lottie
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
 
     // kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

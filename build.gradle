@@ -17,5 +17,7 @@ ext {
     retrofitVersion = '2.9.0'
     kotlin_version = '1.5.0'
     kotlinx_version = '1.5.1'
+    lottieVersion='6.0.0'
+
 
 }

@@ -31,7 +31,7 @@
     </FrameLayout>
 
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/sw_pathGuide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,18 +45,18 @@
         app:useMaterialThemeColors="false" />
 
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/sw_warringSound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:text="경고음"
+        android:thumb="@drawable/switch_thumb"
         android:textColor="@color/black"
         android:textSize="13dp"
+        app:track="@drawable/switch_selector"
         app:layout_constraintStart_toStartOf="@id/frameLayout2"
         app:layout_constraintTop_toBottomOf="@+id/cv_userStateDisplay"
-        app:thumbTint="@color/STH_blue_02_main"
-        app:trackTint="@color/STH_grey_05"
         app:useMaterialThemeColors="false" />
 
 

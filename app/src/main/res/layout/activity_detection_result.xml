@@ -4,48 +4,124 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.DetectionResultActivity"
-    android:background="@color/white">
+    android:background="@color/white"
+    tools:context=".ui.DetectionResultActivity">
 
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lav_carSafe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:lottie_fileName="safety_result.json"
-        app:lottie_autoPlay="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="safety_result.json" />
 
     <TextView
         android:id="@+id/tv_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SMART TRAVAL MODE 가 종료 되었습니다."
-        android:textSize="20dp"
+        android:layout_marginBottom="20dp"
         android:fontFamily="sans-serif"
+        android:text="SMART TRAVAL MODE 가 종료 되었습니다."
         android:textColor="@color/STH_grey_05"
-        android:layout_marginBottom="25dp"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="@id/lav_carSafe"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/lav_carSafe" />
-
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="저장"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+
+    <LinearLayout
+        android:id="@+id/ll_resultContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lav_carSafe">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="주행결과"
+            android:textColor="@color/STH_grey_05"
+            android:textSize="16dp" />
+
+
+        <TextView
+            android:id="@+id/tv_drivingResult"
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="졸음 운전"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textColor="@color/STH_pink" />
+
+        <TextView
+            android:id="@+id/tv_explain"
+            android:layout_marginBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:text="장시간 눈감음, 고개 떨굼이 판단되었습니다."
+            android:textColor="@color/STH_grey_05" />
+
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="운행시간 "
+                android:textColor="@color/STH_grey_05" />
+
+            <TextView
+                android:id="@+id/tv_drivingTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/STH_grey_05"
+                android:textStyle="italic"
+                tools:text="1h 45 min" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="돌아가기"
+        android:layout_marginStart="25dp"
+        android:background="@drawable/btn_selector"
+        android:text="저장"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_resultContainer" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/btn_selector"
+        android:text="돌아가기"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_resultContainer" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

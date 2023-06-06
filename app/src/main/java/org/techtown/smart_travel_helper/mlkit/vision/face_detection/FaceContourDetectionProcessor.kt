@@ -102,6 +102,8 @@ class FaceContourDetectionProcessor(
                     } else {
                         //Todo:알람
                         drowsinessActicity.mediaPlayerB.start()
+                        isHeadDetection =true
+
                     }
                 } else {
                     timeAdjustmentFactor_headDown = 1
@@ -145,6 +147,7 @@ class FaceContourDetectionProcessor(
                         // 눈 2회 이상 눈을 감았다면
                         val endTime = System.currentTimeMillis()
                         if (alarmTime <= endTime) {
+
                             val faceGraphic =
                                 FaceContourGraphic(graphicOverlay, results[0], rect, isClosed)
                             graphicOverlay.add(faceGraphic)
@@ -191,6 +194,7 @@ class FaceContourDetectionProcessor(
                     //사용자가 눈을 감지 않았다면
                     if (drowsinessActicity.mediaPlayerA.isPlaying) {
                         drowsinessActicity.mediaPlayerA.pause()
+                        isEyeDetection = true
                     }
                     isClosed = false
                     alarmStart = true

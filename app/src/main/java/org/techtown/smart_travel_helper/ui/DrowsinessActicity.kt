@@ -23,6 +23,7 @@ import com.google.android.material.snackbar.Snackbar
 import org.techtown.smart_travel_helper.PERMISSION_REQUEST_CODE
 import org.techtown.smart_travel_helper.R
 import org.techtown.smart_travel_helper.camerax.CameraManager
+import org.techtown.smart_travel_helper.common.EyeTracker
 import org.techtown.smart_travel_helper.databinding.ActivityDrowsinessDetectionBinding
 import org.techtown.smart_travel_helper.kakaonavi.NaviBaseActivity
 import org.techtown.smart_travel_helper.location.ClientFusedLocation
@@ -98,6 +99,13 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
             binding.tvEx.visibility = View.GONE
             binding.tvUserState.text = "실시간 감지중"
 
+            // result 변수 초기화
+            EyeTracker.isEyeDetection = false
+            EyeTracker.isHeadDetection = false
+
+            //주행 시작 타이머
+            EyeTracker.drivingStart = System.currentTimeMillis()
+
             // 카메라 활성화
             cameraManager.startCamera()
             // usetState
@@ -109,6 +117,10 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
         }
 
         binding.btnEnd.setOnClickListener { v->
+
+            EyeTracker.drivingEnd = System.currentTimeMillis()
+
+            // result 페이지
             startActivity(Intent(applicationContext,DetectionResultActivity::class.java))
             finish()
         }

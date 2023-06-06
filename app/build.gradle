@@ -5,6 +5,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
 }
 
 
@@ -54,6 +55,7 @@ android {
 
 // 외부 오픈소스 로드
 dependencies {
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.6.1'
     def lifecycle_version = "2.5.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"

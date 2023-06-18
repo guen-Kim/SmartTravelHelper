@@ -1,9 +1,6 @@
 package org.techtown.smart_travel_helper.kakaonavi
 
-import android.content.Context
-import android.content.Intent
-import android.os.Build
-import android.os.Bundle
+
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -27,8 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.techtown.smart_travel_helper.application.GlobalApplication
-import org.techtown.smart_travel_helper.service.NaviService
-import org.techtown.smart_travel_helper.ui.MainActivity
+
 
 // Request route coroutine
 private val job = Job();

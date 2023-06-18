@@ -35,6 +35,7 @@ class IntroActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initSplashAnim()
+        
 
 
         // 안드로이드 앱 홈 화면 위젯(HomeScreenWidgets)을 클릭한 후, 홈 버튼을 누르고 앱 아이콘을 누를 때 액티비티(Activity)가 중첩
@@ -69,7 +70,7 @@ class IntroActivity : AppCompatActivity() {
             override fun onAnimationStart(animation: Animation?) {}
             override fun onAnimationEnd(animation: Animation?) {
                 //startActivity(Intent(applicationContext, DrowsinessActicity::class.java))
-                startActivity(Intent(applicationContext, DrowsinessActicity:class.java))
+                startActivity(Intent(applicationContext, DrowsinessActicity::class.java))
 
                 finish()
             }

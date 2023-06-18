@@ -1,18 +1,13 @@
 package org.techtown.smart_travel_helper.ui
 
-import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.firestore.FirebaseFirestore
 import org.techtown.smart_travel_helper.R
 import org.techtown.smart_travel_helper.common.EyeTracker
 import org.techtown.smart_travel_helper.databinding.ActivityDetectionResultBinding
-import org.techtown.smart_travel_helper.firebase.FirebaseData
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -41,67 +36,15 @@ class DetectionResultActivity : AppCompatActivity() {
         animFadeIn = AnimationUtils.loadAnimation(this, R.anim.splash_fadein);
         binding.llResultContainer.startAnimation(animFadeIn)
         // 돌아가기 버튼
-        binding.btnBack.setOnClickListener { v -> finish() }
-
-        // 저장 버튼
-        binding.btnSave.setOnClickListener { v ->
-            displayDialog()
+        binding.btnBack.setOnClickListener { v ->
+            startActivity(Intent(this , DrowsinessActicity::class.java))
+            finish()
         }
 
         // 현재 날짜
         today = Date()
         dateForm = SimpleDateFormat("yyyy.MM.dd.hh.mm")
 
-    }
-
-    private fun displayDialog() {
-        val ad = AlertDialog.Builder(this)
-        ad.setIcon(R.drawable.ic_launcher_foreground)
-        ad.setTitle("주행결과 저장")
-        ad.setMessage("이메일을 입력해주세요.")
-        ad.setIcon(R.drawable.poi_dot)
-
-        // Dialog 에 에딧텍스트를 추가
-        val et: EditText = EditText(this)
-        ad.setView(et)
-
-        // Dialog 에 확인, 취소 Button 추가
-        ad.setPositiveButton("확인") { dialog, _ ->
-            val dateForm = SimpleDateFormat("yyyy.MM.dd.hh.mm")
-            var email: String = et.text.toString()
-            setDocument(
-                FirebaseData(
-                    email = email,
-                    driveCount = 1,
-                    driveStart = dateForm.format(today),
-                    driveTime = binding.tvDrivingTime.text.toString(),
-                    result = binding.tvDrivingResult.text.toString()
-                )
-            )
-            dialog.dismiss()
-        }
-        ad.setNegativeButton("취소") { dialog, _ ->
-            dialog.dismiss()
-        }
-        ad.show()
-    }
-
-    private fun setDocument(data: FirebaseData) {
-
-        val dateForm = SimpleDateFormat("yyyy.MM.dd.hh.mm")
-
-        FirebaseFirestore.getInstance()
-            .collection("Login")
-            .document(data.email)
-            .collection("UserDriveResult")
-            .document("${dateForm.format(today)}")
-            .set(data)
-            .addOnSuccessListener {
-                Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_LONG).show()
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "이메일을 확인해주세요!", Toast.LENGTH_LONG).show()
-            }
     }
 
 

@@ -64,8 +64,8 @@ class NaviService : Service() {
             title = bundle?.getString("title")
             content = bundle?.getString("content")
         } else {
-            title = "주행 중 STH"
-            content = "안전한 운전, STH"
+            title = "주행 중"
+            content = "안전한 운전"
         }
 
         val resultIntent = Intent(this, DrowsinessActicity::class.java)

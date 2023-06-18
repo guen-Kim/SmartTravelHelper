@@ -7,7 +7,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.AnimationDrawable
-import android.icu.number.Scale.none
 import android.location.Location
 import android.media.MediaPlayer
 import android.net.Uri
@@ -22,6 +21,7 @@ import androidx.core.app.ActivityCompat
 import com.google.android.material.snackbar.Snackbar
 import org.techtown.smart_travel_helper.PERMISSION_REQUEST_CODE
 import org.techtown.smart_travel_helper.R
+import org.techtown.smart_travel_helper.application.GlobalApplication
 import org.techtown.smart_travel_helper.camerax.CameraManager
 import org.techtown.smart_travel_helper.common.EyeTracker
 import org.techtown.smart_travel_helper.databinding.ActivityDrowsinessDetectionBinding
@@ -35,8 +35,7 @@ import java.util.concurrent.Executors
 
 
 class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissionsResultCallback,
-    OnLocationUpdateListener
-{
+    OnLocationUpdateListener {
 
     private lateinit var binding: ActivityDrowsinessDetectionBinding
     private lateinit var layout: View
@@ -51,11 +50,10 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
     lateinit var animationDrawable: AnimationDrawable
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // 액티비티 애니매이션
-        overridePendingTransition(R.anim.horizon_enter,R.anim.horizon_exit)
+        overridePendingTransition(R.anim.horizon_enter, R.anim.horizon_exit)
 
         // view binding
         binding = ActivityDrowsinessDetectionBinding.inflate(layoutInflater)
@@ -73,23 +71,23 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
         setStatusBarColor()
     }
 
-    private fun init(){
-        startForegroundService(this, "안전한 주행중", "안전하고 즐거운 운전, STH")
+    private fun init() {
+        startForegroundService(this, "안전한 주행중", "안전하고 즐거운 운전")
 
         mediaPlayerA = MediaPlayer.create(this, R.raw.alarm);
         mediaPlayerB = MediaPlayer.create(this, R.raw.alarm);
 
 
-        binding.swPathGuide.setOnCheckedChangeListener{CompoundButton, onSwitch ->
+        binding.swPathGuide.setOnCheckedChangeListener { CompoundButton, onSwitch ->
             PATHGUIDE = onSwitch
 
         }
 
-        binding.swWarringSound.setOnCheckedChangeListener{CompoundButton, onSwitch ->
+        binding.swWarringSound.setOnCheckedChangeListener { CompoundButton, onSwitch ->
             WARRINGSOUND = onSwitch
 
         }
-        binding.btnStart.setOnClickListener { v->
+        binding.btnStart.setOnClickListener { v ->
             binding.btnStart.isEnabled = false
             binding.btnEnd.isEnabled = true
             binding.swPathGuide.isEnabled = false
@@ -116,23 +114,20 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
             animationDrawable.start()
         }
 
-        binding.btnEnd.setOnClickListener { v->
+        binding.btnEnd.setOnClickListener { v ->
 
             EyeTracker.drivingEnd = System.currentTimeMillis()
             //자원해제
             stopDetection()
 
             // result 페이지
-            startActivity(Intent(applicationContext,DetectionResultActivity::class.java))
+            startActivity(Intent(applicationContext, DetectionResultActivity::class.java))
             finish()
         }
     }
 
 
-
-
-
-    fun startNavi(){
+    fun startNavi() {
 
         val fragment = NaviFragment()
         val bundle = Bundle()
@@ -263,12 +258,10 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
     }
 
     override fun onBackPressed() {
-        if(System.currentTimeMillis() - time >= 2000){
+        if (System.currentTimeMillis() - time >= 2000) {
             time = System.currentTimeMillis();
-            Toast.makeText(getApplicationContext(),"한번더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
-        }
-
-        else if(System.currentTimeMillis() - time < 2000 ){
+            Toast.makeText(getApplicationContext(), "한번더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
+        } else if (System.currentTimeMillis() - time < 2000) {
             super.onBackPressed()
         }
 
@@ -335,7 +328,7 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
             clientFusedLocation.stopLocationUpdates() // 위치 업데이트 요청 종료
         }
 
-        try{
+        try {
             // MediaPlayer 해지
             if (mediaPlayerA != null && mediaPlayerA.isPlaying()) {
                 mediaPlayerA.stop()
@@ -346,7 +339,7 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
                 mediaPlayerB.release()
 
             }
-        }catch (e: IllegalStateException) {
+        } catch (e: IllegalStateException) {
             e.printStackTrace()
         }
         // 포그라운드 서비스 종료
@@ -389,8 +382,9 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
             }
         }
     }
+
     // ---------------------Service--------------------
-    private fun startForegroundService(context : Context, title : String, content : String) {
+    private fun startForegroundService(context: Context, title: String, content: String) {
         val bundle = Bundle().apply {
             putString("title", title)
             putString("content", content)
@@ -407,7 +401,7 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
         }
     }
 
-    private fun stopForegroundService(context : Context) {
+    private fun stopForegroundService(context: Context) {
         context.stopService(Intent(context, NaviService::class.java))
     }
 

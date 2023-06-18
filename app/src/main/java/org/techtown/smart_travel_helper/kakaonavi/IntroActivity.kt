@@ -15,7 +15,7 @@ import org.techtown.smart_travel_helper.BuildConfig
 import org.techtown.smart_travel_helper.R
 import org.techtown.smart_travel_helper.application.GlobalApplication.Companion.knsdk
 import org.techtown.smart_travel_helper.databinding.ActivityIntroBinding
-import org.techtown.smart_travel_helper.ui.WebViewActivity
+import org.techtown.smart_travel_helper.ui.DrowsinessActicity
 
 
 class IntroActivity : AppCompatActivity() {
@@ -69,7 +69,7 @@ class IntroActivity : AppCompatActivity() {
             override fun onAnimationStart(animation: Animation?) {}
             override fun onAnimationEnd(animation: Animation?) {
                 //startActivity(Intent(applicationContext, DrowsinessActicity::class.java))
-                startActivity(Intent(applicationContext, WebViewActivity::class.java))
+                startActivity(Intent(applicationContext, DrowsinessActicity:class.java))
 
                 finish()
             }
@@ -91,7 +91,7 @@ class IntroActivity : AppCompatActivity() {
         scope.launch {
             /** 3. kakaoNaviSDK의 초기화 및 앱 정보 등록을 시작 이 과정에서 권한 체크 및 초기화 과정의 문제점을 체크하여 이상이 있을 경우 문제에 대한 에러 코드 넘겨줌**/
             knsdk.apply {
-                initializeWithAppKey(KAKAO_KEY, "1.6.8", "test",
+                initializeWithAppKey(KAKAO_KEY, "1.6.8", "ss",
                     KNLanguageType.KNLanguageType_KOREAN, aCompletion = {
                         if (it != null) {
                             android.util.Log.e("ABASDBASDB", "failed ${it.code}")

@@ -119,6 +119,8 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
         binding.btnEnd.setOnClickListener { v->
 
             EyeTracker.drivingEnd = System.currentTimeMillis()
+            //자원해제
+            stopDetection()
 
             // result 페이지
             startActivity(Intent(applicationContext,DetectionResultActivity::class.java))
@@ -325,6 +327,10 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
 
     override fun onDestroy() {
         super.onDestroy()
+        stopDetection()
+    }
+
+    private fun stopDetection() {
         if (clientFusedLocation != null) {
             clientFusedLocation.stopLocationUpdates() // 위치 업데이트 요청 종료
         }
@@ -343,12 +349,10 @@ class DrowsinessActicity : NaviBaseActivity(), ActivityCompat.OnRequestPermissio
         }catch (e: IllegalStateException) {
             e.printStackTrace()
         }
-
-
-
         // 포그라운드 서비스 종료
         stopForegroundService(this)
     }
+
 
     private fun createCameraManager() {
         cameraManager = CameraManager(

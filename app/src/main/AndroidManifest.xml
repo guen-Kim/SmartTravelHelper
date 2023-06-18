@@ -29,9 +29,6 @@
         <activity
             android:name=".ui.DetectionResultActivity"
             android:exported="false" />
-        <activity
-            android:name=".ui.WebViewActivity"
-            android:exported="false" />
 
         <service
             android:name=".service.NaviService"

@@ -1,5 +1,6 @@
 package org.techtown.smart_travel_helper.ui
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -12,13 +13,16 @@ import org.techtown.smart_travel_helper.R
 import org.techtown.smart_travel_helper.common.EyeTracker
 import org.techtown.smart_travel_helper.databinding.ActivityDetectionResultBinding
 import org.techtown.smart_travel_helper.firebase.FirebaseData
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class DetectionResultActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityDetectionResultBinding
     lateinit var animFadeIn: Animation
-
+    var today: Date? = null
+    var dateForm: SimpleDateFormat? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,13 +33,10 @@ class DetectionResultActivity : AppCompatActivity() {
         init()
         setDectectionData()
 
-
     }
 
 
     fun init() {
-
-
         // 애니메이션
         animFadeIn = AnimationUtils.loadAnimation(this, R.anim.splash_fadein);
         binding.llResultContainer.startAnimation(animFadeIn)
@@ -44,12 +45,12 @@ class DetectionResultActivity : AppCompatActivity() {
 
         // 저장 버튼
         binding.btnSave.setOnClickListener { v ->
-
-
             displayDialog()
-
-
         }
+
+        // 현재 날짜
+        today = Date()
+        dateForm = SimpleDateFormat("yyyy.MM.dd.hh.mm")
 
     }
 
@@ -66,22 +67,19 @@ class DetectionResultActivity : AppCompatActivity() {
 
         // Dialog 에 확인, 취소 Button 추가
         ad.setPositiveButton("확인") { dialog, _ ->
-
-
+            val dateForm = SimpleDateFormat("yyyy.MM.dd.hh.mm")
             var email: String = et.text.toString()
             setDocument(
                 FirebaseData(
                     email = email,
-                    headDetection = EyeTracker.isHeadDetection,
-                    eyeDetection = EyeTracker.isEyeDetection,
-                    drivingTime = binding.tvDrivingTime.text.toString()
+                    driveCount = 1,
+                    driveStart = dateForm.format(today),
+                    driveTime = binding.tvDrivingTime.text.toString(),
+                    result = binding.tvDrivingResult.text.toString()
                 )
             )
             dialog.dismiss()
         }
-
-
-
         ad.setNegativeButton("취소") { dialog, _ ->
             dialog.dismiss()
         }
@@ -89,9 +87,14 @@ class DetectionResultActivity : AppCompatActivity() {
     }
 
     private fun setDocument(data: FirebaseData) {
+
+        val dateForm = SimpleDateFormat("yyyy.MM.dd.hh.mm")
+
         FirebaseFirestore.getInstance()
             .collection("Login")
             .document(data.email)
+            .collection("UserDriveResult")
+            .document("${dateForm.format(today)}")
             .set(data)
             .addOnSuccessListener {
                 Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_LONG).show()
@@ -117,19 +120,17 @@ class DetectionResultActivity : AppCompatActivity() {
             binding.tvDrivingResult.text = "졸음운전"
             binding.tvExplain.text = "장시간 눈감음이 탐지되었습니다."
         } else {
-            binding.tvDrivingResult.text = "안전운전"
+            binding.tvDrivingResult.text= "안전운전"
             binding.tvExplain.text = " "
         }
 
         val drivingTime = EyeTracker.drivingEnd - EyeTracker.drivingStart
         binding.tvDrivingTime.text =
             "${drivingTime / (1000 * 60 * 60)}H ${drivingTime / (1000 * 60)} min  ${drivingTime / 1000} s"
-
-
     }
 
 
     override fun onBackPressed() {
-        return;
+        return
     }
 }

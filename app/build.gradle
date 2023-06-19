@@ -30,11 +30,30 @@ android {
     }
 
     buildTypes {
-        release {
-            minifyEnabled false
 
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        debug{
+            // 프로가드 활성화
+            minifyEnabled true
+            // 사용하지 않은 리소스 제거
+            shrinkResources true
+            // 기본 프로가드, 디버그에 필요한 프로가드 설정
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-debug.pro'
+            // 프로젝트에 필요한 프로가드 설정
+            proguardFile 'proguard-rules.pro'
         }
+
+
+        release {
+            // 프로가드 활성화
+            minifyEnabled true
+            // 사용하지 않은 리소스 제거
+            shrinkResources true
+            // Android SDK 에서 제공해주는 default proguard
+            proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
+            // 사용자 정의 proguard
+            proguardFile 'proguard-rules.pro'
+        }
+
 
 
     }

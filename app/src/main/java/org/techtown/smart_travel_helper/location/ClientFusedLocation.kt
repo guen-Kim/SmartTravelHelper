@@ -71,19 +71,6 @@ class ClientFusedLocation(
 
     }
 
-
-/*    fusedLocationClient.lastLocation.addOnSuccessListener { location : Location? ->
-        if (location != null) {
-            val latitude = location.latitude
-            val longitude = location.longitude
-            Log.d("Test", "GPS Location Latitude: $latitude" +
-                    ", Longitude: $longitude")
-        }
-    }*/
-
-
-
-
     /**위치 업데이트 요청 **/
     // requestLocationUpdates()으로 변경사항에 대한 Callback을 요청
     private fun initLocationCallback() {
@@ -111,7 +98,7 @@ class ClientFusedLocation(
             return
         }
         val locationRequest = LocationRequest.create()?.apply {
-            interval = 3000 // 시간 간격
+            interval = 5000 // 시간 간격
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY // 정밀도 최상
         }
 

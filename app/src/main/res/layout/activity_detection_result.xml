@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:fontFamily="sans-serif"
-        android:text="SMART TRAVAL MODE 가 종료 되었습니다."
+        android:text="졸음 퇴치가 종료 되었습니다."
         android:textColor="@color/STH_grey_05"
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="@id/lav_carSafe"

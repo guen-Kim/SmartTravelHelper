@@ -1,12 +1,16 @@
 package org.techtown.smart_travel_helper.kakaonavi
 
 
+
+import android.location.Location
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import com.google.android.material.snackbar.Snackbar
 import com.kakaomobility.knsdk.*
 import com.kakaomobility.knsdk.common.gps.KN_DEFAULT_POS_X
 import com.kakaomobility.knsdk.common.gps.KN_DEFAULT_POS_Y
@@ -23,14 +27,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.techtown.smart_travel_helper.R
 import org.techtown.smart_travel_helper.application.GlobalApplication
+import org.techtown.smart_travel_helper.location.ClientFusedLocation
+import org.techtown.smart_travel_helper.location.OnLocationUpdateListener
+import org.techtown.smart_travel_helper.showSnackbar
 
 
 // Request route coroutine
 private val job = Job();
 private val scope = CoroutineScope(Dispatchers.Main + job);
 
-abstract class NaviBaseActivity : AppCompatActivity(), OnCompleteSearchforNavi {
+abstract class NaviBaseActivity : AppCompatActivity(), OnCompleteSearchforNavi,
+    ActivityCompat.OnRequestPermissionsResultCallback,
+    OnLocationUpdateListener {
 
     // 현좌표
     private lateinit var searchPos: IntPoint
@@ -43,6 +53,9 @@ abstract class NaviBaseActivity : AppCompatActivity(), OnCompleteSearchforNavi {
     private var knDestination: KNPOI? = null
     private var knAvoidOption: Int = 0
     private var knRouteOption: KNRoutePriority = KNRoutePriority.KNRoutePriority_Recommand
+
+    protected lateinit var clientFusedLocation: ClientFusedLocation
+    protected lateinit var layout: View
 
 
     open fun initialize() {
@@ -64,7 +77,7 @@ abstract class NaviBaseActivity : AppCompatActivity(), OnCompleteSearchforNavi {
         supportActionBar?.hide()
     }
 
-    protected fun getKey(): String?{
+    protected fun getKey(): String? {
         return GlobalApplication.instance.putDataHolder(knTrip!!)
     }
 
@@ -150,7 +163,8 @@ abstract class NaviBaseActivity : AppCompatActivity(), OnCompleteSearchforNavi {
                                 aCarWidth = -1,
                                 aCarHeight = -1,
                                 aCarLength = -1,
-                                aCarWeight = -1)
+                                aCarWeight = -1
+                            )
                             // 경로 설정시 환경 설정 초기화
                             aTrip?.setRouteConfig(routeConfig)
 
@@ -244,6 +258,34 @@ abstract class NaviBaseActivity : AppCompatActivity(), OnCompleteSearchforNavi {
                         }
                     }
                 }
+            }
+        }
+    }
+
+
+
+    protected fun startFusedLocation() {
+        clientFusedLocation = ClientFusedLocation(this, this)
+        clientFusedLocation.requestLastLocation()
+        clientFusedLocation.startLocationUpdates()
+    }
+
+    // user location
+    override fun onLocationUpdated(location: Location?) {
+        if (location != null) {
+            val latitude = location.latitude
+            val longitude = location.longitude
+            Log.d(
+                "Test", "GPS Location Latitude: $latitude" +
+                        ", Longitude: $longitude"
+            )
+        } else {
+            layout.showSnackbar(
+                R.string.inactive_gps,
+                Snackbar.LENGTH_INDEFINITE,
+                R.string.ok
+            ) {
+
             }
         }
     }

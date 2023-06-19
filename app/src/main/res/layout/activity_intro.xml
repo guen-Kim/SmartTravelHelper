@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="15dp"
-        android:text="졸음운전 없는 안전한 운전 "
+        android:text="모두를 위한 안전한 운전 "
         android:textColor="@color/STH_grey_05"
         android:textSize="13dp"
         android:textStyle="italic"
